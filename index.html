@@ -13,35 +13,51 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 :root{--bg:#0A0A0B;--card:#131316;--card2:#1C1C21;--border:rgba(255,255,255,0.07);--text:#F0F0F5;--muted:#606070;--muted2:#888898;--green:#CC3800;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
 body.light{--bg:#F2F2F7;--card:#FFFFFF;--card2:#EBEBF0;--border:rgba(0,0,0,0.1);--text:#0A0A0B;--muted:#3A3A50;--muted2:#5A5A70;}
-/* Light mode: all SVG icons explicitly dark */
-body.light svg{stroke-color:inherit;}
 body.light .ni svg{stroke:#3A3A50 !important;}
 body.light .ni.on svg{stroke:var(--nav-accent,#FF4500) !important;}
 body.light .bnav{background:rgba(242,242,247,0.97);border-top-color:rgba(0,0,0,0.1);}
-body.light .wo-close svg{stroke:#3A3A50;}
-body.light .wo-pause-btn svg{stroke:#3A3A50;}
-body.light .wo-pause-btn{background:rgba(0,0,0,0.08);border-color:rgba(0,0,0,0.15);}
-body.light .sett-row-right svg{stroke:#3A3A50;}
-body.light .sett-row-icon svg{stroke:#fff !important;}
-body.light .ex-drag-handle svg{stroke:#3A3A50;}
-body.light .ex-del-btn svg{stroke:#CC3800;}
-body.light .set-del svg{stroke:#3A3A50;}
-body.light .set-inp{background:#EBEBF0;border-color:rgba(0,0,0,0.1);color:#0A0A0B;}
-body.light .ex-name-inp{color:#0A0A0B;}
-body.light .cust-field-inp,.body.light .auth-inp{background:#EBEBF0;color:#0A0A0B;}
-body.light .auth-inp{background:#EBEBF0;border-color:rgba(0,0,0,0.1);color:#0A0A0B;}
-body.light .pdf-btn{background:#EBEBF0;border-color:rgba(0,0,0,0.12);color:#3A3A50;}
-body.light .pdf-btn svg{stroke:#3A3A50;}
-body.light .tmpl-ex-inp,.body.light .cust-ex-inp{background:#EBEBF0;color:#0A0A0B;}
-body.light .as-cancel{background:#EBEBF0;color:#3A3A50;}
-body.light .action-sheet{background:#F2F2F7;}
-body.light .hist-badge{}
-body.light .month-banner{background:linear-gradient(135deg,#e8e8f0,#f0f0f8);}
-body.light .ex-meta-inp{background:#EBEBF0;color:#3A3A50;}
-body.light #auth-screen{background:#F2F2F7;}
-body.light #workout-overlay{background:#F2F2F7;}
 body.light .wo-hdr{border-bottom-color:rgba(0,0,0,0.1);}
+body.light .wo-close{background:#E0E0E8;border-color:rgba(0,0,0,0.12);}
+body.light .wo-close svg{stroke:#1A1A30 !important;}
+body.light .wo-pause-btn{background:rgba(255,69,0,0.1);border-color:rgba(255,69,0,0.25);}
+body.light .wo-pause-btn svg{stroke:#CC3800 !important;}
+body.light .set-inp{background:#EBEBF0;border-color:rgba(0,0,0,0.1);color:#0A0A0B;}
+body.light .set-inp::placeholder{color:#8A8AA0;}
+body.light .set-done{background:#EBEBF0;border-color:rgba(0,0,0,0.12);}
+body.light .set-del svg{stroke:#3A3A50 !important;}
+body.light .ex-name-inp{color:#0A0A0B;}
+body.light .ex-meta-inp{background:#E0E0E8;color:#3A3A50;}
+body.light .ex-drag-handle svg{stroke:#3A3A50 !important;}
+body.light .ex-del-btn svg{stroke:#CC3800 !important;}
+body.light .add-set-btn{background:#E8E8EE;border-color:rgba(0,0,0,0.12);color:#3A3A50;}
+body.light .add-set-btn svg,.add-ex-btn svg{stroke:#3A3A50 !important;}
+body.light .add-ex-btn{background:#FFFFFF;border-color:rgba(0,0,0,0.12);color:#3A3A50;}
+body.light .sett-row-right svg{stroke:#3A3A50 !important;}
+body.light .sett-row-icon svg{stroke:#fff !important;}
+body.light .pdf-btn{background:#E8E8EE;border-color:rgba(0,0,0,0.12);color:#3A3A50;}
+body.light .pdf-btn svg{stroke:#3A3A50 !important;}
+body.light .cust-day-chevron svg,.body.light .tmpl-day-chev svg{stroke:#3A3A50 !important;}
+body.light .cust-ex-del svg,.body.light .tmpl-ex-del svg{stroke:#CC3800 !important;}
+body.light .cust-add-ex svg,.body.light .tmpl-add-ex svg{stroke:#3A3A50 !important;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+body.light .cust-del-day svg{stroke:#CC3800 !important;}
+body.light .cust-add-day{background:#E8E8EE;border-color:rgba(0,0,0,0.12);}
+body.light .cust-add-day svg{stroke:#3A3A50 !important;}
+body.light .as-cancel{background:#E0E0E8;color:#1A1A30;}
+body.light .action-sheet{background:#F5F5FA;}
+body.light .as-btn.danger svg{stroke:#CC3800 !important;}
+body.light .as-btn.ok svg{stroke:#CC3800 !important;}
+body.light .auth-inp{background:#EBEBF0;border-color:rgba(0,0,0,0.1);color:#0A0A0B;}
+body.light #workout-overlay{background:#F2F2F7;}
+body.light .wo-finish-bar{border-top-color:rgba(0,0,0,0.1);}
+body.light .rest-skip{background:#E0E0E8;border-color:rgba(0,0,0,0.12);color:#3A3A50;}
+body.light .month-banner{background:linear-gradient(135deg,#E8E8F0,#EFEFFA);border-color:rgba(204,56,0,0.25);}
+body.light .sum-discard-btn{border-color:rgba(0,0,0,0.12);color:#5A5A70;}
+body.light #auth-screen{background:#F2F2F7;}
+body.light .pause-title{color:#CC5500;}
+body.light .tmpl-day-chev svg{stroke:#3A3A50 !important;}
+body.light .tmpl-ex-del svg{stroke:#CC3800 !important;}
+body.light .tmpl-add-ex svg{stroke:#3A3A50 !important;}height:100%;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
  
 /* AUTH */
 #auth-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px;}
@@ -1087,6 +1103,16 @@ function renderProg(){
           <button class="bw-log-btn" onclick="logBW()">Log</button>
         </div>
         ${buildBWChart()}
+        ${recentBW.length?`<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">${recentBW.map(b=>`
+          <div class="bw-entry" data-bid="${b.id}">
+            <div>
+              <span style="font-size:14px;font-weight:800">${dispW(b.weight)}</span>
+              <span style="font-size:11px;color:var(--muted2);margin-left:8px">${fmtDate(b.date)}</span>
+            </div>
+            <div onclick="deleteBW(${b.id})" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,69,0,0.08);border-radius:8px;border:1px solid rgba(255,69,0,0.2);">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#FF4500;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </div>
+          </div>`).join('')}</div>`:''}
       </div>
     </div>
     ${getSplit().days.map(dd=>{
