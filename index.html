@@ -785,7 +785,14 @@ function renderDash(){
         <div class="nw-tag">Dag ${rot.indexOf(nt)+1} van ${rot.length}</div>
         <div class="nw-name">${dd.name.toUpperCase()}</div>
         <div class="nw-muscles">${dd.label}</div>
-        <div class="nw-bottom"><div class="nw-excount">${tmpl.length} oefeningen</div><div style="display:flex;gap:8px;"><div class="nw-btn" onclick="event.stopPropagation();skipDay()" style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.2)"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;display:inline;vertical-align:middle;margin-right:4px"><polyline points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>Skip</div><div class="nw-btn">Start &rarr;</div></div></div>
+        <div class="nw-bottom">
+          <div class="nw-excount">${tmpl.length} oefeningen</div>
+          <div class="nw-btn">Start &rarr;</div>
+        </div>
+      </div>
+      <div onclick="skipDay()" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;color:var(--muted2);font-size:13px;font-weight:700;">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--muted2);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        Dag overslaan
       </div>
     </div>
     <div class="rec-wrap">
