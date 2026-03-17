@@ -12,9 +12,11 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 :root{--bg:#0A0A0B;--card:#131316;--card2:#1C1C21;--border:rgba(255,255,255,0.07);--text:#F0F0F5;--muted:#606070;--muted2:#888898;--green:#CC3800;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
-body.light{--bg:#F2F2F7;--card:#FFFFFF;--card2:#EBEBF0;--border:rgba(0,0,0,0.1);--text:#0A0A0B;--muted:#3A3A50;--muted2:#5A5A70;}
-body.light .ni svg{stroke:#3A3A50 !important;}
+body.light{--bg:#F2F2F7;--card:#FFFFFF;--card2:#EBEBF0;--border:rgba(0,0,0,0.1);--text:#0A0A0B;--muted:#1C1C2E;--muted2:#3A3A55;}
+body.light .ni svg{stroke:#1C1C2E !important;}
+body.light .ni span{color:#1C1C2E !important;}
 body.light .ni.on svg{stroke:var(--nav-accent,#FF4500) !important;}
+body.light .ni.on span{color:var(--nav-accent,#FF4500) !important;}
 body.light .bnav{background:rgba(242,242,247,0.97);border-top-color:rgba(0,0,0,0.1);}
 body.light .wo-hdr{border-bottom-color:rgba(0,0,0,0.1);}
 body.light .wo-close{background:#E0E0E8;border-color:rgba(0,0,0,0.12);}
@@ -1103,16 +1105,7 @@ function renderProg(){
           <button class="bw-log-btn" onclick="logBW()">Log</button>
         </div>
         ${buildBWChart()}
-        ${recentBW.length?`<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">${recentBW.map(b=>`
-          <div class="bw-entry" data-bid="${b.id}">
-            <div>
-              <span style="font-size:14px;font-weight:800">${dispW(b.weight)}</span>
-              <span style="font-size:11px;color:var(--muted2);margin-left:8px">${fmtDate(b.date)}</span>
-            </div>
-            <div onclick="deleteBW(${b.id})" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,69,0,0.08);border-radius:8px;border:1px solid rgba(255,69,0,0.2);">
-              <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#FF4500;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-            </div>
-          </div>`).join('')}</div>`:''}
+        ${recentBW.length ? '<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">'+recentBW.map(function(b){return '<div class="bw-entry" data-bid="'+b.id+'" style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--card2);border-radius:10px;border:1px solid var(--border)"><div><span style="font-size:14px;font-weight:800">'+dispW(b.weight)+'</span><span style="font-size:11px;color:var(--muted2);margin-left:8px">'+fmtDate(b.date)+'</span></div><div onclick="deleteBW('+b.id+')" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,69,0,0.08);border-radius:8px;border:1px solid rgba(255,69,0,0.2);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#FF4500;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div></div>';}).join('')+'</div>' : ''}
       </div>
     </div>
     ${getSplit().days.map(dd=>{
