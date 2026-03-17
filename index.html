@@ -700,6 +700,8 @@ function nav(v,direction){
 })();
  
 // ── DASHBOARD ─────────────────────────────────────────────────
+function haptic(p){try{if(navigator&&navigator.vibrate)navigator.vibrate(p);}catch(e){}}
+ 
 function dispW(w,short){
   if(!w&&w!==0)return'—';
   var u=(STATE.settings||{}).unit||'kg';
@@ -710,12 +712,11 @@ function skipDay(){
   var rot=getRotation();
   var cur=getNext();
   var idx=rot.indexOf(cur);
-  var nextIdx=(idx+1)%rot.length;
-  var nextDay=getDayDef(rot[nextIdx]);
+  var nextDay=getDayDef(rot[(idx+1)%rot.length]);
   STATE.sessions.push({id:Date.now(),type:cur,date:Date.now(),duration:0,exercises:[],skipped:true,note:'Dag overgeslagen'});
-  haptic([10,5,10]);
-  saveState();renderDash();
-  showToast('→ '+nextDay.name,nextDay.color);
+  saveState();
+  renderDash();
+  showToast('Overgeslagen \u2192 '+nextDay.name,nextDay.color);
 }
 function buildCalendar(){
   var now=new Date();var yr=now.getFullYear();var mo=now.getMonth();
@@ -988,7 +989,6 @@ function delEx(ei){if(activeWO.exercises.length<=1){showToast('Minimaal 1 oefeni
 function addSet(ei){const ex=activeWO.exercises[ei];const prev=ex.sets[ex.sets.length-1];ex.sets.push({weight:prev?prev.weight:'',reps:prev?prev.reps:'',done:false});renderWOBody();setTimeout(()=>{const cc=document.getElementById(`ex-${ei}`);if(cc)cc.scrollIntoView({behavior:'smooth',block:'nearest'});},60);}
 function delSet(ei,si){activeWO.exercises[ei].sets.splice(si,1);renderWOBody();}
 function updSet(ei,si,f,v){if(activeWO)activeWO.exercises[ei].sets[si][f]=v;}
-function haptic(p){try{if(navigator&&navigator.vibrate)navigator.vibrate(p);}catch(e){}}
 var prBannerTimer=null;
 function showPRBanner(name,weight){var b=document.getElementById('pr-banner');var sub=document.getElementById('pr-sub');if(!b)return;if(sub)sub.textContent=name+' — '+weight+' kg';b.classList.add('show');clearTimeout(prBannerTimer);prBannerTimer=setTimeout(function(){b.classList.remove('show');},3000);}
 function toggleSet(ei,si){
