@@ -11,8 +11,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
-:root{--bg:#0A0A0B;--card:#131316;--card2:#1C1C21;--border:rgba(255,255,255,0.07);--text:#F0F0F5;--muted:#606070;--muted2:#888898;--green:#34D399;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
-body.light{--bg:#F2F2F7;--card:#FFFFFF;--card2:#E8E8EE;--border:rgba(0,0,0,0.08);--text:#0A0A0B;--muted:#AEAEC0;--muted2:#8E8EA0;}
+:root{--bg:#0A0A0B;--card:#131316;--card2:#1C1C21;--border:rgba(255,255,255,0.07);--text:#F0F0F5;--muted:#606070;--muted2:#888898;--green:#FFB700;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
+body.light{--bg:#F2F2F7;--card:#FFFFFF;--card2:#EBEBF0;--border:rgba(0,0,0,0.1);--text:#0A0A0B;--muted:#64647A;--muted2:#84849A;}
+body.light .ni svg{stroke:#4A4A60;}
+body.light .ni.on svg{stroke:var(--nav-accent,#FF4500);}
+body.light .wo-close svg,body.light .wo-pause-btn svg{stroke:#4A4A60;}
+body.light .sett-row-right svg{stroke:#64647A;}
+body.light .hist-del-bg{background:#FF4500;}
+body.light .ex-drag-handle svg,body.light .ex-del-btn svg,body.light .set-del svg{stroke:#64647A;}
+body.light #sync-dot{background:#FF4500;}
+body.light .pdf-btn svg{stroke:#4A4A60;}
+body.light .pdf-btn{color:#4A4A60;background:#E0E0E8;border-color:rgba(0,0,0,0.12);}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
  
 /* AUTH */
@@ -32,7 +41,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrop
 .auth-err{font-size:12px;color:#FF4500;text-align:center;min-height:18px;font-weight:600;}
  
 /* SYNC DOT */
-#sync-dot{position:fixed;top:calc(var(--safe-top) + 6px);right:14px;width:7px;height:7px;border-radius:50%;background:#34D399;z-index:999;opacity:0;transition:opacity .3s;}
+#sync-dot{position:fixed;top:calc(var(--safe-top) + 6px);right:14px;width:7px;height:7px;border-radius:50%;background:#FFB700;z-index:999;opacity:0;transition:opacity .3s;}
 #sync-dot.show{opacity:1;}
 #sync-dot.error{background:#FF4500;}
  
@@ -369,7 +378,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .as-btn svg{width:20px;height:20px;flex-shrink:0;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .as-btn.danger{color:#FF4500;} .as-btn.danger svg{stroke:#FF4500;}
 .as-btn.warn{color:#FFB700;} .as-btn.warn svg{stroke:#FFB700;}
-.as-btn.ok{color:#34D399;} .as-btn.ok svg{stroke:#34D399;}
+.as-btn.ok{color:#FFB700;} .as-btn.ok svg{stroke:#FFB700;}
 .as-cancel{text-align:center;padding:14px;font-size:16px;font-weight:800;color:var(--text);cursor:pointer;border-radius:14px;background:var(--card2);margin-top:6px;-webkit-user-select:none;user-select:none;}
 .as-cancel:active{opacity:.7;}
 </style>
@@ -611,8 +620,8 @@ function fmtDur(s){return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(
 function fmtDate(ts){const d=new Date(ts);return `${['Zo','Ma','Di','Wo','Do','Vr','Za'][d.getDay()]} ${d.getDate()} ${'jan,feb,mrt,apr,mei,jun,jul,aug,sep,okt,nov,dec'.split(',')[d.getMonth()]}`;}
 function fmtDateFull(ts){const d=new Date(ts);return `${['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'][d.getDay()]} ${d.getDate()} ${'januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december'.split(',')[d.getMonth()]} ${d.getFullYear()}`;}
 function fmtMonthLabel(ym){const[y,m]=ym.split('-');return `${'jan,feb,mrt,apr,mei,jun,jul,aug,sep,okt,nov,dec'.split(',')[parseInt(m)-1]} ${y}`;}
-function getStreak(){if(!STATE.sessions.length)return 0;let s=0,p=new Date();p.setHours(0,0,0,0);for(const x of [...STATE.sessions].sort((a,b)=>b.date-a.date)){const dd=new Date(x.date);dd.setHours(0,0,0,0);if((p-dd)/86400000<=1){s++;p=dd;}else break;}return s;}
-function getTotalStr(){let t=0;STATE.sessions.forEach(s=>t+=totalVol(s));if(!t)return'0 kg';return t>9999?`${(t/1000).toFixed(1)}t`:`${t.toLocaleString()} kg`;}
+function getStreak(){var real=STATE.sessions.filter(function(s){return !s.skipped;});if(!real.length)return 0;var s=0,p=new Date();p.setHours(0,0,0,0);for(var i=0;i<real.length;i++){var x=real.sort(function(a,b){return b.date-a.date;})[i];var dd=new Date(x.date);dd.setHours(0,0,0,0);if((p-dd)/86400000<=1){s++;p=dd;}else break;}return s;}
+function getTotalStr(){var t=0;STATE.sessions.filter(function(s){return !s.skipped;}).forEach(function(s){t+=totalVol(s);});if(!t)return'0 kg';return t>9999?(t/1000).toFixed(1)+'t':t.toLocaleString()+' kg';}
 function getMonths(){const set=new Set();STATE.sessions.forEach(s=>{const d=new Date(s.date);set.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);});return[...set].sort().reverse();}
 function sessionsForMonth(ym){if(!ym||ym==='__all__')return STATE.sessions;return STATE.sessions.filter(s=>{const d=new Date(s.date);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`===ym;});}
 function isFirstOfMonth(){return new Date().getDate()===1;}
@@ -654,6 +663,55 @@ function nav(v,direction){
 })();
  
 // ── DASHBOARD ─────────────────────────────────────────────────
+function dispW(w,short){
+  if(!w&&w!==0)return'—';
+  var u=(STATE.settings||{}).unit||'kg';
+  if(u==='lbs'){var lbs=Math.round(parseFloat(w)*2.2046*10)/10;return short?lbs+'lbs':lbs+' lbs';}
+  return short?w+'kg':w+' kg';
+}
+function skipDay(){
+  var rot=getRotation();
+  var cur=getNext();
+  var idx=rot.indexOf(cur);
+  var nextIdx=(idx+1)%rot.length;
+  var nextDay=getDayDef(rot[nextIdx]);
+  STATE.sessions.push({id:Date.now(),type:cur,date:Date.now(),duration:0,exercises:[],skipped:true,note:'Dag overgeslagen'});
+  haptic([10,5,10]);
+  saveState();renderDash();
+  showToast('→ '+nextDay.name,nextDay.color);
+}
+function buildCalendar(){
+  var now=new Date();var yr=now.getFullYear();var mo=now.getMonth();
+  var first=new Date(yr,mo,1);var last=new Date(yr,mo+1,0);
+  var startDow=(first.getDay()+6)%7; // Monday start
+  var days='Ma,Di,Wo,Do,Vr,Za,Zo'.split(',');
+  var mNames='Jan,Feb,Mrt,Apr,Mei,Jun,Jul,Aug,Sep,Okt,Nov,Dec'.split(',');
+  // Build session map for this month
+  var sessMap={};
+  STATE.sessions.filter(function(s){var d=new Date(s.date);return d.getFullYear()===yr&&d.getMonth()===mo;}).forEach(function(s){
+    var d=new Date(s.date).getDate();
+    if(!sessMap[d])sessMap[d]=[];
+    sessMap[d].push(s);
+  });
+  var cells='';
+  // Empty cells before first day
+  for(var i=0;i<startDow;i++)cells+='<div></div>';
+  for(var d=1;d<=last.getDate();d++){
+    var isToday=d===now.getDate();
+    var sessList=sessMap[d]||[];
+    var dotColor='';
+    if(sessList.length){var dd2=getDayDef(sessList[sessList.length-1].type);dotColor=sessList[0].skipped?'#606070':dd2.color;}
+    cells+='<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">'
+      +'<div style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:'+(isToday?'800':'600')+';background:'+(isToday?'rgba(255,69,0,0.15)':'transparent')+';color:'+(isToday?'#FF4500':'var(--text)')+'">'+(d)+'</div>'
+      +(dotColor?'<div style="width:5px;height:5px;border-radius:50%;background:'+dotColor+'"></div>':'<div style="width:5px;height:5px"></div>')
+    +'</div>';
+  }
+  return '<div style="margin:0 18px 14px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px">'
+    +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px">'+mNames[mo]+' '+yr+'</div>'
+    +'<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;">'
+    +days.map(function(d){return '<div style="font-size:9px;font-weight:700;color:var(--muted);padding-bottom:4px">'+d+'</div>';}).join('')
+    +cells+'</div></div>';
+}
 function buildWeeklyChart(){
   const days=['Ma','Di','Wo','Do','Vr','Za','Zo'];
   const now=new Date();const dow=now.getDay();const mo=(dow===0?-6:1-dow);
@@ -690,7 +748,7 @@ function renderDash(){
         <div class="nw-tag">Dag ${rot.indexOf(nt)+1} van ${rot.length}</div>
         <div class="nw-name">${dd.name.toUpperCase()}</div>
         <div class="nw-muscles">${dd.label}</div>
-        <div class="nw-bottom"><div class="nw-excount">${tmpl.length} oefeningen</div><div class="nw-btn">Start &rarr;</div></div>
+        <div class="nw-bottom"><div class="nw-excount">${tmpl.length} oefeningen</div><div style="display:flex;gap:8px;"><div class="nw-btn" onclick="event.stopPropagation();skipDay()" style="background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.2)"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;display:inline;vertical-align:middle;margin-right:4px"><polyline points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>Skip</div><div class="nw-btn">Start &rarr;</div></div></div>
       </div>
     </div>
     <div class="rec-wrap">
@@ -861,7 +919,7 @@ function renderWOBody(){
           ${prevSetsStr?`<div style="font-size:10px;color:var(--muted);margin-top:2px">Vorige: ${prevSetsStr}</div>`:''}
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
-          <div class="ex-prog-num" style="color:${done>0&&done>=parseInt(ex.targetSets)?'#34D399':c}">${done}/${ex.targetSets}</div>
+          <div class="ex-prog-num" style="color:${done>0&&done>=parseInt(ex.targetSets)?'#FFB700':c}">${done}/${ex.targetSets}</div>
           <div style="display:flex;gap:4px;">
             <div class="ex-drag-handle" data-ei="${ei}" ontouchstart="dragStart(event,${ei})" ontouchmove="dragMove(event)" ontouchend="dragEnd(event)"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
             <div class="ex-del-btn" onclick="delEx(${ei})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg></div>
@@ -880,12 +938,13 @@ function renderWOBody(){
     </div>`;
   }).join('')+`<div class="add-ex-btn" onclick="addExercise()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>`;
 }
-function updEx(ei,f,v){if(!activeWO)return;if(f==='targetSets')v=parseInt(v)||1;activeWO.exercises[ei][f]=v;const ex=activeWO.exercises[ei];const done=ex.sets.filter(s=>s.done).length;const n=document.querySelector(`#ex-${ei} .ex-prog-num`);if(n){n.textContent=`${done}/${ex.targetSets}`;n.style.color=done>0&&done>=parseInt(ex.targetSets)?'#34D399':getDayDef(activeWO.dayId).color;}}
+function updEx(ei,f,v){if(!activeWO)return;if(f==='targetSets')v=parseInt(v)||1;activeWO.exercises[ei][f]=v;const ex=activeWO.exercises[ei];const done=ex.sets.filter(s=>s.done).length;const n=document.querySelector(`#ex-${ei} .ex-prog-num`);if(n){n.textContent=`${done}/${ex.targetSets}`;n.style.color=done>0&&done>=parseInt(ex.targetSets)?'#FFB700':getDayDef(activeWO.dayId).color;}}
 function addExercise(){activeWO.exercises.push({name:'',targetSets:3,targetReps:'8-12',sets:[]});renderWOBody();setTimeout(()=>{const cs=document.querySelectorAll('.ex-card');const l=cs[cs.length-1];if(l){l.scrollIntoView({behavior:'smooth',block:'center'});const i=l.querySelector('.ex-name-inp');if(i)setTimeout(()=>i.focus(),300);}},80);}
 function delEx(ei){if(activeWO.exercises.length<=1){showToast('Minimaal 1 oefening nodig');return;}activeWO.exercises.splice(ei,1);renderWOBody();}
 function addSet(ei){const ex=activeWO.exercises[ei];const prev=ex.sets[ex.sets.length-1];ex.sets.push({weight:prev?prev.weight:'',reps:prev?prev.reps:'',done:false});renderWOBody();setTimeout(()=>{const cc=document.getElementById(`ex-${ei}`);if(cc)cc.scrollIntoView({behavior:'smooth',block:'nearest'});},60);}
 function delSet(ei,si){activeWO.exercises[ei].sets.splice(si,1);renderWOBody();}
 function updSet(ei,si,f,v){if(activeWO)activeWO.exercises[ei].sets[si][f]=v;}
+function haptic(p){try{if(navigator&&navigator.vibrate)navigator.vibrate(p);}catch(e){}}
 var prBannerTimer=null;
 function showPRBanner(name,weight){var b=document.getElementById('pr-banner');var sub=document.getElementById('pr-sub');if(!b)return;if(sub)sub.textContent=name+' — '+weight+' kg';b.classList.add('show');clearTimeout(prBannerTimer);prBannerTimer=setTimeout(function(){b.classList.remove('show');},3000);}
 function toggleSet(ei,si){
@@ -893,7 +952,16 @@ function toggleSet(ei,si){
   const row=document.getElementById(`sr-${ei}-${si}`);
   if(row){const inp=row.querySelectorAll('input');if(inp[0].value)s.weight=inp[0].value;if(inp[1].value)s.reps=inp[1].value;}
   s.done=!s.done;
-  if(s.done)startRestTimer(activeWO.exercises[ei].name);
+  if(s.done){
+    haptic([12]);
+    startRestTimer(activeWO.exercises[ei].name);
+    if(s.weight){
+      const w=parseFloat(s.weight);
+      const hist=getExData(activeWO.exercises[ei].name);
+      const prevBest=hist.length?Math.max(...hist.map(d=>d.maxW)):0;
+      if(w>prevBest){showPRBanner(activeWO.exercises[ei].name,w);haptic([20,10,20]);}
+    }
+  }
   renderWOBody();
 }
  
@@ -904,7 +972,7 @@ function renderHist(){
   const sorted=histFilter==='all'?all:all.filter(function(s){return s.type===histFilter;});
   const dayIds=['all'].concat([...new Set(STATE.sessions.map(function(s){return s.type;}))]);
   const filterPills=dayIds.map(function(id){if(id==='all')return '<div class="filter-pill'+(histFilter==='all'?' on':'')+'" onclick="histFilter=\'all\';renderHist()">Alles</div>';var dd2=getDayDef(id);return '<div class="filter-pill'+(histFilter===id?' on':'')+'" onclick="histFilter=\''+id+'\';renderHist()" style="'+(histFilter===id?'border-color:'+dd2.color+';color:'+dd2.color:'')+'">'+dd2.name+'</div>';}).join('');
-  document.getElementById('v-hist').innerHTML=`<div class="view-hdr"><h1 class="bb">Logboek</h1></div><div class="filter-bar">${filterPills}</div><div id="hist-list" style="padding:0 18px">
+  document.getElementById('v-hist').innerHTML=`<div class="view-hdr"><h1 class="bb">Logboek</h1></div><div class="filter-bar">${filterPills}</div>${buildCalendar()}<div id="hist-list" style="padding:0 18px">
     ${sorted.length?sorted.map((s,i)=>{const dd=getDayDef(s.type);return`
       <div class="hist-item-wrap" id="hw-${i}">
         <div class="hist-sess" id="hs-${i}" data-sessid="${s.id}">
@@ -938,6 +1006,24 @@ function setupLongPress(el,cb){
   el.addEventListener('touchend',function(){clearTimeout(_lpTimer);setTimeout(function(){el.classList.remove('lp-shake');},400);},{passive:true});
   el.addEventListener('touchmove',function(){moved=true;clearTimeout(_lpTimer);},{passive:true});
   el.addEventListener('contextmenu',function(e){e.preventDefault();});
+}
+function attachBWLongPress(){
+  document.querySelectorAll('.bw-entry').forEach(function(el){
+    var bid=parseInt(el.dataset.bid);
+    if(!bid||el.dataset.lpAttached)return;
+    el.dataset.lpAttached='1';
+    setupLongPress(el,function(){
+      showActionSheet('Meting verwijderen',[
+        {label:'Verwijderen',style:'danger',
+         icon:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+         action:'function(){deleteBW('+bid+');}'}
+      ]);
+    });
+  });
+}
+function deleteBW(bid){
+  STATE.bodyWeights=(STATE.bodyWeights||[]).filter(function(b){return b.id!==bid;});
+  saveState();renderProg();showToast('Meting verwijderd');
 }
 function attachHistLongPress(){
   document.querySelectorAll('.hist-sess').forEach(function(el){
@@ -976,7 +1062,7 @@ function renderProg(){
     <div class="bw-section">
       <div class="sec-label">Lichaamsgewicht</div>
       <div class="bw-card">
-        ${latestBW?`<div class="bw-latest">Laatste meting: <strong>${latestBW.weight} kg</strong> · ${fmtDate(latestBW.date)}</div>`:''}
+        ${latestBW?`<div class="bw-latest">Laatste meting: <strong>${dispW(latestBW.weight)}</strong> · ${fmtDate(latestBW.date)}</div>`:''}
         <div class="bw-input-row">
           <input class="bw-inp" id="bw-inp" type="number" inputmode="decimal" placeholder="kg bijv. 82.5">
           <button class="bw-log-btn" onclick="logBW()">Log</button>
@@ -1011,13 +1097,13 @@ function buildBWChart(){
   const pts=data.map((d,i)=>({x:pt.l+(i/(data.length-1))*iW,y:pt.t+iH-((d.weight-minV)/rng)*iH}));
   const lp=pts[pts.length-1];const gid='bwg'+Math.random().toString(36).slice(2,5);
   return `<svg style="width:100%;overflow:visible;margin-top:4px" viewBox="0 0 ${W} ${H}">
-    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34D399" stop-opacity=".3"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></linearGradient></defs>
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFB700" stop-opacity=".3"/><stop offset="100%" stop-color="#FFB700" stop-opacity="0"/></linearGradient></defs>
     <text x="${pt.l-4}" y="${pt.t+4}" text-anchor="end" fill="#505060" font-size="9" font-family="Manrope">${maxV}</text>
     <text x="${pt.l-4}" y="${pt.t+iH+4}" text-anchor="end" fill="#505060" font-size="9" font-family="Manrope">${minV}</text>
     <polygon points="${pt.l},${pt.t+iH} ${pts.map(p=>`${p.x},${p.y}`).join(' ')} ${pt.l+iW},${pt.t+iH}" fill="url(#${gid})"/>
-    <polyline points="${pts.map(p=>`${p.x},${p.y}`).join(' ')}" fill="none" stroke="#34D399" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="${lp.x}" cy="${lp.y}" r="3.5" fill="#34D399"/>
-    <text x="${lp.x}" y="${lp.y-8}" text-anchor="middle" fill="#34D399" font-size="9" font-weight="700" font-family="Manrope">${data[data.length-1].weight}kg</text>
+    <polyline points="${pts.map(p=>`${p.x},${p.y}`).join(' ')}" fill="none" stroke="#FFB700" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${lp.x}" cy="${lp.y}" r="3.5" fill="#FFB700"/>
+    <text x="${lp.x}" y="${lp.y-8}" text-anchor="middle" fill="#FFB700" font-size="9" font-weight="700" font-family="Manrope">${data[data.length-1].weight}kg</text>
   </svg>`;
 }
  
@@ -1027,12 +1113,15 @@ function buildProgCard(name,dd,filteredSessions){
   const pr=Math.max(...allData.map(d=>d.maxW));
   const last=allData[allData.length-1];
   const diff=allData.length>1?+(last.maxW-allData[allData.length-2].maxW).toFixed(1):null;
-  const e1rm=Math.max(...STATE.sessions.flatMap(s=>(s.exercises||[]).filter(e=>e.name===name).flatMap(e=>e.sets.filter(st=>st.weight&&st.reps).map(st=>get1RM(st.weight,st.reps)))));
-  const diffHtml=diff!=null?(diff>0?`<span style="color:#34D399">+${diff}kg</span>`:diff<0?`<span style="color:#FF4500">${diff}kg</span>`:`<span style="color:var(--muted2)">${diff}kg</span>`):'';
+  var e1rm=0;STATE.sessions.forEach(function(s){(s.exercises||[]).filter(function(e){return e.name===name;}).forEach(function(e){e.sets.filter(function(st){return st.weight&&st.reps;}).forEach(function(st){var v=get1RM(st.weight,st.reps);if(v>e1rm)e1rm=v;});});});
+  // Find goal weight from templates
+  var goalW=0;Object.values(STATE.templates).forEach(function(arr){arr.forEach(function(ex){if(ex.name===name&&ex.goalWeight)goalW=ex.goalWeight;});});
+  const diffHtml=diff!=null?(diff>0?`<span style="color:#FFB700">+${diff}kg</span>`:diff<0?`<span style="color:#FF4500">${diff}kg</span>`:`<span style="color:var(--muted2)">${diff}kg</span>`):'';
   return`<div class="prog-card">
     <div class="prog-card-name" title="${esc(name)}">${esc(name)}</div>
-    <div class="prog-card-pr bb" style="color:${dd.color}">${pr}<span style="font-size:11px;font-family:'Manrope',sans-serif;font-weight:700">kg PR</span></div>
-    ${e1rm>pr?`<div class="prog-card-1rm">~${e1rm}kg geschatte 1RM</div>`:''}
+    <div class="prog-card-pr bb" style="color:${dd.color}">${dispW(pr,true)} <span style="font-size:10px;font-family:'Manrope',sans-serif;font-weight:700">PR</span></div>
+    ${e1rm>pr?'<div class="prog-card-1rm">~'+e1rm+'kg geschatte 1RM</div>':''}
+    ${goalW>0?'<div style="margin-top:4px"><div style="font-size:9px;color:var(--muted2);margin-bottom:3px">Doel: '+goalW+'kg ('+Math.min(100,Math.round(pr/goalW*100))+'%)</div><div style="height:3px;background:var(--border);border-radius:2px"><div style="height:100%;width:'+Math.min(100,Math.round(pr/goalW*100))+'%;background:#FF4500;border-radius:2px"></div></div></div>':''}
     ${diff!=null?`<div class="prog-card-delta">${diffHtml} vs vorige</div>`:''}
     ${buildMiniChart(filtData.length>=2?filtData:allData.slice(-8),dd.color)}
   </div>`;
@@ -1094,6 +1183,19 @@ function renderSett(){
       </div>
     </div>
     <div class="sett-section">
+      <div class="sec-label">Eenheden</div>
+      <div class="sett-card">
+        <div class="sett-row" style="cursor:default">
+          <div class="sett-row-icon" style="background:#FF450020"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6 4v6a6 6 0 0 0 12 0V4"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
+          <div class="sett-row-info"><div class="sett-row-title">Eenheid</div><div class="sett-row-sub">Kilogram of pounds</div></div>
+          <div style="display:flex;gap:0;background:var(--card2);border-radius:9px;padding:3px;">
+            <div onclick="setUnit('kg')" style="padding:6px 14px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;background:${(STATE.settings||{}).unit!=='lbs'?'var(--border2, rgba(255,255,255,0.15))':'transparent'};color:${(STATE.settings||{}).unit!=='lbs'?'var(--text)':'var(--muted2)'}">kg</div>
+            <div onclick="setUnit('lbs')" style="padding:6px 14px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;background:${(STATE.settings||{}).unit==='lbs'?'var(--border2, rgba(255,255,255,0.15))':'transparent'};color:${(STATE.settings||{}).unit==='lbs'?'var(--text)':'var(--muted2)'}">lbs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sett-section">
       <div class="sec-label">Trainingsschema</div>
       <div class="sett-card">
         <div class="sett-row" style="flex-direction:column;align-items:flex-start;gap:12px;cursor:default">
@@ -1129,6 +1231,8 @@ function renderSett(){
     </div>`;
 }
  
+function setUnit(u){if(!STATE.settings)STATE.settings=window.defaultSettings();STATE.settings.unit=u;saveState();renderSett();renderProg();}
+ 
 function toggleSetting(key){if(!STATE.settings)STATE.settings=window.defaultSettings();STATE.settings[key]=!STATE.settings[key];saveState();if(key==='lightTheme')applyTheme();renderSett();}
 function applyTheme(){document.body.classList.toggle('light',!!(STATE.settings||{}).lightTheme);}
 function setRestDur(d){if(!STATE.settings)STATE.settings=window.defaultSettings();STATE.settings.restDuration=d;saveState();renderSett();}
@@ -1149,6 +1253,7 @@ function renderTemplateEditor(){
             <input class="tmpl-ex-inp" type="text" placeholder="Oefening naam" value="${esc(ex.name)}" onblur="updTmpl('${dd.id}',${ei},'name',this.value)">
             <input class="tmpl-ex-inp tmpl-ex-small" type="number" inputmode="numeric" placeholder="3" value="${ex.targetSets||''}" onblur="updTmpl('${dd.id}',${ei},'targetSets',this.value)" title="Sets">
             <input class="tmpl-ex-inp tmpl-ex-small" type="text" placeholder="8-12" value="${esc(ex.targetReps||'')}" onblur="updTmpl('${dd.id}',${ei},'targetReps',this.value)" title="Reps">
+            <input class="tmpl-ex-inp tmpl-ex-small" type="number" inputmode="decimal" placeholder="doel kg" value="${ex.goalWeight||''}" onblur="updTmpl('${dd.id}',${ei},'goalWeight',this.value)" title="Doelgewicht" style="font-size:10px">
             <div class="tmpl-ex-del" onclick="delTmpl('${dd.id}',${ei})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
           </div>`).join('')}
         <div class="tmpl-add-ex" onclick="addTmpl('${dd.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>
@@ -1157,7 +1262,7 @@ function renderTemplateEditor(){
   }).join('');
 }
 function toggleTmplDay(i){const b=document.getElementById(`tb-${i}`);const c=document.getElementById(`tc-${i}`);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');}
-function updTmpl(dayId,ei,f,v){if(!STATE.templates[dayId])return;if(f==='targetSets')v=parseInt(v)||1;STATE.templates[dayId][ei][f]=v;saveState();}
+function updTmpl(dayId,ei,f,v){if(!STATE.templates[dayId])return;if(f==='targetSets')v=parseInt(v)||1;if(f==='goalWeight')v=parseFloat(v)||0;STATE.templates[dayId][ei][f]=v;saveState();}
 function delTmpl(dayId,ei){if(!STATE.templates[dayId])return;if(STATE.templates[dayId].length<=1){showToast('Minimaal 1 oefening');return;}STATE.templates[dayId].splice(ei,1);saveState();renderSett();}
 function addTmpl(dayId){if(!STATE.templates[dayId])STATE.templates[dayId]=[];STATE.templates[dayId].push({name:'',targetSets:3,targetReps:'8-12'});saveState();renderSett();}
  
