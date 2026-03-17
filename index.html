@@ -12,7 +12,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 :root{--bg:#0A0A0B;--card:#131316;--card2:#1C1C21;--border:rgba(255,255,255,0.07);--text:#F0F0F5;--muted:#606070;--muted2:#888898;--green:#34D399;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;}
+body.light{--bg:#F2F2F7;--card:#FFFFFF;--card2:#E8E8EE;--border:rgba(0,0,0,0.08);--text:#0A0A0B;--muted:#AEAEC0;--muted2:#8E8EA0;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
  
 /* AUTH */
 #auth-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px;}
@@ -57,6 +58,37 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrop
 .bb{font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
 .sec-label{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
  
+/* WEEKLY CHART */
+.weekly-chart-wrap{margin:14px 18px 0;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 14px 10px;}
+.wc-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.wc-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);}
+.wc-total{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;}
+.wc-bars{display:flex;align-items:flex-end;gap:4px;height:44px;}
+.wc-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.wc-bar{width:100%;border-radius:4px 4px 0 0;min-height:2px;}
+.wc-day{font-size:9px;font-weight:700;text-transform:uppercase;}
+/* FILTER BAR */
+.filter-bar{display:flex;gap:7px;padding:0 18px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;}
+.filter-bar::-webkit-scrollbar{display:none;}
+.filter-pill{flex-shrink:0;padding:5px 13px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:11px;font-weight:700;color:var(--muted2);cursor:pointer;-webkit-user-select:none;user-select:none;}
+.filter-pill.on{color:var(--text);border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.08);}
+body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.06);}
+/* LONG-PRESS */
+.lp-shake{animation:lpshk .35s ease;}
+@keyframes lpshk{0%,100%{transform:rotate(0)}25%{transform:rotate(-1.5deg)}75%{transform:rotate(1.5deg)}}
+/* DRAG REORDER */
+.ex-drag-handle{width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:grab;flex-shrink:0;opacity:.35;touch-action:none;}
+.ex-drag-handle svg{width:14px;height:14px;stroke:var(--muted2);fill:none;stroke-width:2;stroke-linecap:round;}
+.ex-card.dragging{opacity:.35;transform:scale(0.97);}
+.ex-card.drag-over{border-color:rgba(255,255,255,0.3);}
+/* PR BANNER */
+.pr-banner{position:absolute;top:calc(var(--safe-top) + 68px);left:14px;right:14px;background:linear-gradient(135deg,#CC7A00,#FFB700);border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;z-index:250;transform:translateY(-130px);transition:transform .4s cubic-bezier(.32,.72,0,1);}
+.pr-banner.show{transform:translateY(0);}
+.pr-banner svg{width:20px;height:20px;stroke:#000;fill:none;stroke-width:2.5;stroke-linecap:round;flex-shrink:0;}
+.pr-banner-title{font-weight:800;font-size:13px;color:#000;}
+.pr-banner-sub{font-size:11px;color:rgba(0,0,0,0.6);margin-top:1px;}
+/* BW ENTRY */
+.bw-entry{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--card2);border-radius:9px;border:1px solid var(--border);}
 /* DASHBOARD */
 .dash-hdr{padding:16px 18px 0;}
 .greeting{font-size:11px;color:var(--muted2);font-weight:600;text-transform:uppercase;letter-spacing:1px;}
@@ -411,6 +443,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrop
         Workout afronden
       </button>
     </div>
+    <div class="pr-banner" id="pr-banner"><svg viewBox="0 0 24 24"><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"/><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><div><div class="pr-banner-title" id="pr-title">Persoonlijk record!</div><div class="pr-banner-sub" id="pr-sub"></div></div></div>
     <div class="pause-overlay" id="pause-overlay">
       <svg viewBox="0 0 24 24" style="width:64px;height:64px;stroke:#FFB700;fill:none;stroke-width:1.5;stroke-linecap:round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
       <div class="pause-title">GEPAUZEERD</div>
@@ -621,6 +654,17 @@ function nav(v,direction){
 })();
  
 // ── DASHBOARD ─────────────────────────────────────────────────
+function buildWeeklyChart(){
+  const days=['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const now=new Date();const dow=now.getDay();const mo=(dow===0?-6:1-dow);
+  const mon=new Date(now);mon.setDate(now.getDate()+mo);mon.setHours(0,0,0,0);
+  const vols=days.map(function(_,i){const d=new Date(mon);d.setDate(mon.getDate()+i);const nx=new Date(d);nx.setDate(d.getDate()+1);return STATE.sessions.filter(function(s){return s.date>=d.getTime()&&s.date<nx.getTime();}).reduce(function(a,s){return a+totalVol(s);},0);});
+  const maxV=Math.max.apply(null,vols.concat([1]));const tot=vols.reduce(function(a,v){return a+v;},0);
+  const ti=(dow===0?6:dow-1);const ac=accentColor();
+  const bars=vols.map(function(v,i){return '<div class="wc-bar-wrap"><div class="wc-bar" style="height:'+Math.max(3,Math.round(v/maxV*44))+'px;background:'+(i===ti?ac:'rgba(255,255,255,0.1)')+'"></div><div class="wc-day" style="color:'+(i===ti?ac:'var(--muted)')+'">'+days[i]+'</div></div>';}).join('');
+  return '<div class="weekly-chart-wrap"><div class="wc-hdr"><div class="wc-title">Deze week</div><div class="wc-total bb">'+(tot>999?(tot/1000).toFixed(1)+'t':tot>0?tot.toLocaleString()+' kg':'Geen data')+'</div></div><div class="wc-bars">'+bars+'</div></div>';
+}
+ 
 function renderDash(){
   const nt=getNext(),dd=getDayDef(nt),now=new Date();
   const recent=[...STATE.sessions].reverse().slice(0,4);
@@ -638,6 +682,7 @@ function renderDash(){
       <div class="stat-card"><div class="stat-val bb" style="font-size:${getTotalStr().length>6?'15px':'24px'};padding-top:${getTotalStr().length>6?'5px':'1px'}">${getTotalStr()}</div><div class="stat-lbl">Volume</div></div>
       <div class="stat-card"><div class="stat-val bb" style="color:${getStreak()>0?'#FFB800':'var(--muted)'}">${getStreak()}</div><div class="stat-lbl">Streak${getStreak()>0?' 🔥':''}</div></div>
     </div>
+    ${buildWeeklyChart()}
     ${showBanner?`<div class="month-banner" onclick="exportPDF('${prevMK}')"><div class="month-banner-text"><div class="month-banner-title">${fmtMonthLabel(prevMK)} rapport klaar</div><div class="month-banner-sub">${sessionsForMonth(prevMK).length} sessies — download PDF</div></div><div class="month-banner-btn">Download</div></div>`:''}
     <div class="nw-wrap">
       <div class="sec-label">Volgende workout · <span style="color:${dd.color}">${getSplit().label}</span></div>
@@ -787,6 +832,11 @@ function saveSummary(){
  
 function discardWorkout(){closeWorkout();}
  
+var _dragIdx=null,_dragStartY=0;
+function dragStart(e,ei){_dragIdx=ei;_dragStartY=e.touches[0].clientY;var c=document.getElementById('ex-'+ei);if(c)c.classList.add('dragging');e.stopPropagation();}
+function dragMove(e){if(_dragIdx===null)return;var dy=e.touches[0].clientY-_dragStartY;var c=document.getElementById('ex-'+_dragIdx);if(c)c.style.transform='translateY('+dy+'px)';document.querySelectorAll('.ex-card:not(.dragging)').forEach(function(x){x.classList.remove('drag-over');});var under=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var ov=under?under.closest('.ex-card'):null;if(ov&&ov.id!=='ex-'+_dragIdx)ov.classList.add('drag-over');e.preventDefault();}
+function dragEnd(e){if(_dragIdx===null)return;var c=document.getElementById('ex-'+_dragIdx);if(c){c.classList.remove('dragging');c.style.transform='';}var ov=document.querySelector('.ex-card.drag-over');if(ov){var ti=parseInt(ov.id.replace('ex-',''));ov.classList.remove('drag-over');if(ti!==_dragIdx){var exs=activeWO.exercises;var moved=exs.splice(_dragIdx,1)[0];exs.splice(ti,0,moved);renderWOBody();}}_dragIdx=null;}
+ 
 // WORKOUT BODY
 function renderWOBody(){
   if(!activeWO)return;
@@ -812,7 +862,9 @@ function renderWOBody(){
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
           <div class="ex-prog-num" style="color:${done>0&&done>=parseInt(ex.targetSets)?'#34D399':c}">${done}/${ex.targetSets}</div>
-          <div class="ex-del-btn" onclick="delEx(${ei})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg></div>
+          <div style="display:flex;gap:4px;">
+            <div class="ex-drag-handle" data-ei="${ei}" ontouchstart="dragStart(event,${ei})" ontouchmove="dragMove(event)" ontouchend="dragEnd(event)"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+            <div class="ex-del-btn" onclick="delEx(${ei})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg></div>
         </div>
       </div>
       <div class="ex-sets">${ex.sets.map((s,si)=>`
@@ -834,6 +886,8 @@ function delEx(ei){if(activeWO.exercises.length<=1){showToast('Minimaal 1 oefeni
 function addSet(ei){const ex=activeWO.exercises[ei];const prev=ex.sets[ex.sets.length-1];ex.sets.push({weight:prev?prev.weight:'',reps:prev?prev.reps:'',done:false});renderWOBody();setTimeout(()=>{const cc=document.getElementById(`ex-${ei}`);if(cc)cc.scrollIntoView({behavior:'smooth',block:'nearest'});},60);}
 function delSet(ei,si){activeWO.exercises[ei].sets.splice(si,1);renderWOBody();}
 function updSet(ei,si,f,v){if(activeWO)activeWO.exercises[ei].sets[si][f]=v;}
+var prBannerTimer=null;
+function showPRBanner(name,weight){var b=document.getElementById('pr-banner');var sub=document.getElementById('pr-sub');if(!b)return;if(sub)sub.textContent=name+' — '+weight+' kg';b.classList.add('show');clearTimeout(prBannerTimer);prBannerTimer=setTimeout(function(){b.classList.remove('show');},3000);}
 function toggleSet(ei,si){
   const s=activeWO.exercises[ei].sets[si];
   const row=document.getElementById(`sr-${ei}-${si}`);
@@ -844,13 +898,16 @@ function toggleSet(ei,si){
 }
  
 // ── HISTORY ───────────────────────────────────────────────────
+let histFilter='all';
 function renderHist(){
-  const sorted=[...STATE.sessions].reverse();
-  document.getElementById('v-hist').innerHTML=`<div class="view-hdr"><h1 class="bb">Logboek</h1></div><div id="hist-list" style="padding:0 18px">
+  const all=[...STATE.sessions].reverse();
+  const sorted=histFilter==='all'?all:all.filter(function(s){return s.type===histFilter;});
+  const dayIds=['all'].concat([...new Set(STATE.sessions.map(function(s){return s.type;}))]);
+  const filterPills=dayIds.map(function(id){if(id==='all')return '<div class="filter-pill'+(histFilter==='all'?' on':'')+'" onclick="histFilter=\'all\';renderHist()">Alles</div>';var dd2=getDayDef(id);return '<div class="filter-pill'+(histFilter===id?' on':'')+'" onclick="histFilter=\''+id+'\';renderHist()" style="'+(histFilter===id?'border-color:'+dd2.color+';color:'+dd2.color:'')+'">'+dd2.name+'</div>';}).join('');
+  document.getElementById('v-hist').innerHTML=`<div class="view-hdr"><h1 class="bb">Logboek</h1></div><div class="filter-bar">${filterPills}</div><div id="hist-list" style="padding:0 18px">
     ${sorted.length?sorted.map((s,i)=>{const dd=getDayDef(s.type);return`
       <div class="hist-item-wrap" id="hw-${i}">
-        <div class="hist-del-bg"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div>
-        <div class="hist-sess" id="hs-${i}" ontouchstart="hSwipeStart(event,${i})" ontouchmove="hSwipeMove(event,${i})" ontouchend="hSwipeEnd(event,${i})">
+        <div class="hist-sess" id="hs-${i}" data-sessid="${s.id}">
           <div class="hist-sess-hdr" onclick="document.getElementById('hd-${i}').classList.toggle('open')">
             <div class="hist-badge" style="background:${dd.color}22;color:${dd.color}">${dd.name.toUpperCase()}</div>
             <div class="hist-info">
@@ -870,28 +927,26 @@ function renderHist(){
         </div>
       </div>`;}).join(''):'<div class="empty-msg" style="padding:40px 0">Nog geen sessies gelogd. 💪</div>'}
   </div>`;
+  setTimeout(attachHistLongPress,50);
 }
  
-// Swipe-to-delete in history
-let hSwX=0,hSwEl=null;
-function hSwipeStart(e,i){hSwX=e.touches[0].clientX;hSwEl=i;}
-function hSwipeMove(e,i){
-  const dx=e.touches[0].clientX-hSwX;
-  const el=document.getElementById('hs-'+i);
-  if(dx<0&&Math.abs(dx)<100)el.style.transform=`translateX(${dx}px)`;
+// Long-press to delete (universal)
+let _lpTimer=null;
+function setupLongPress(el,cb){
+  var moved=false;
+  el.addEventListener('touchstart',function(e){moved=false;_lpTimer=setTimeout(function(){if(!moved){el.classList.add('lp-shake');cb();}},600);},{passive:true});
+  el.addEventListener('touchend',function(){clearTimeout(_lpTimer);setTimeout(function(){el.classList.remove('lp-shake');},400);},{passive:true});
+  el.addEventListener('touchmove',function(){moved=true;clearTimeout(_lpTimer);},{passive:true});
+  el.addEventListener('contextmenu',function(e){e.preventDefault();});
 }
-function hSwipeEnd(e,i){
-  const dx=e.changedTouches[0].clientX-hSwX;
-  const el=document.getElementById('hs-'+i);
-  if(dx<-70){
-    el.style.transition='transform .2s';el.style.transform='translateX(-80px)';
-    showActionSheet('Sessie verwijderen',[{label:'Verwijderen',style:'danger',icon:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',action:`function(){deleteSession(${i});}`}]);
-  } else {el.style.transition='transform .2s';el.style.transform='translateX(0)';}
+function attachHistLongPress(){
+  document.querySelectorAll('.hist-sess').forEach(function(el){
+    var sid=parseInt(el.dataset.sessid);
+    setupLongPress(el,function(){showActionSheet('Sessie verwijderen',[{label:'Verwijderen',style:'danger',icon:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',action:'function(){deleteSession('+sid+');}'}]);});
+  });
 }
-function deleteSession(i){
-  const sorted=[...STATE.sessions].reverse();
-  const sess=sorted[i];
-  STATE.sessions=STATE.sessions.filter(s=>s.id!==sess.id);
+function deleteSession(sessId){
+  STATE.sessions=STATE.sessions.filter(function(s){return s.id!==sessId;});
   saveState();renderHist();showToast('Sessie verwijderd');
 }
  
@@ -902,8 +957,9 @@ function renderProg(){
   if(!progMonth){const n=new Date();const cur=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;progMonth=months.includes(cur)?cur:(months[0]||'__all__');}
   const filtered=sessionsForMonth(progMonth);
   const allExNames=[...new Set(STATE.sessions.flatMap(s=>s.exercises.map(e=>e.name)).filter(Boolean))];
-  const bwArr=STATE.bodyWeights||[];
-  const latestBW=bwArr.length?bwArr[bwArr.length-1]:null;
+  var bwArr=STATE.bodyWeights||[];
+  var latestBW=bwArr.length?bwArr[bwArr.length-1]:null;
+  var recentBW=[...bwArr].reverse().slice(0,5);
   document.getElementById('v-prog').innerHTML=`
     <div class="view-hdr"><h1 class="bb">Progressie</h1>
       <div class="pdf-btn" onclick="exportPDF('${progMonth}')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>PDF</div>
@@ -935,7 +991,8 @@ function renderProg(){
       if(!cards)return'';
       return `<div class="prog-section-label" style="color:${dd.color}">${dd.name.toUpperCase()} · ${dd.short}</div><div class="prog-grid">${cards}</div>`;
     }).join('')}
-    ${allExNames.length===0?'<div class="no-data">Log eerst wat sessies! 💪</div>':''}`;
+    ${allExNames.length===0?'<div class="no-data">Log eerst wat sessies!</div>':''}`;
+  setTimeout(function(){attachBWLongPress();},50);
 }
  
 function logBW(){
@@ -1001,6 +1058,16 @@ function renderSett(){
   document.getElementById('v-sett').innerHTML=`
     <div class="view-hdr"><h1 class="bb">Instellingen</h1></div>
     <div class="sett-section">
+      <div class="sec-label">Weergave</div>
+      <div class="sett-card">
+        <div class="sett-row" style="cursor:default">
+          <div class="sett-row-icon" style="background:#F59E0B20"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
+          <div class="sett-row-info"><div class="sett-row-title">Licht thema</div><div class="sett-row-sub">Wissel tussen donker en licht</div></div>
+          <div class="sett-toggle${(STATE.settings||{}).lightTheme?' on':''}" onclick="toggleSetting('lightTheme')"></div>
+        </div>
+      </div>
+    </div>
+    <div class="sett-section">
       <div class="sec-label">Account</div>
       <div class="sett-card">
         <div class="sett-row" style="cursor:default">
@@ -1062,7 +1129,8 @@ function renderSett(){
     </div>`;
 }
  
-function toggleSetting(key){if(!STATE.settings)STATE.settings=window.defaultSettings();STATE.settings[key]=!STATE.settings[key];saveState();renderSett();}
+function toggleSetting(key){if(!STATE.settings)STATE.settings=window.defaultSettings();STATE.settings[key]=!STATE.settings[key];saveState();if(key==='lightTheme')applyTheme();renderSett();}
+function applyTheme(){document.body.classList.toggle('light',!!(STATE.settings||{}).lightTheme);}
 function setRestDur(d){if(!STATE.settings)STATE.settings=window.defaultSettings();STATE.settings.restDuration=d;saveState();renderSett();}
  
 function renderTemplateEditor(){
@@ -1193,6 +1261,7 @@ function hexToRgb(hex){return[parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5
 // ── INIT ──────────────────────────────────────────────────────
 window.initApp=function(){
   initIcon();
+  applyTheme();
   document.getElementById('ni-dash').classList.add('on');
   getEl('dash').className='view visible active';
   document.querySelector('.bnav').style.setProperty('--nav-accent',accentColor());
