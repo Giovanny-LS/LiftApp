@@ -935,19 +935,24 @@ function saveSummary(){
  
 function discardWorkout(){closeWorkout();}
  
-var _dragIdx=null,_dragStartY=0;
-function dragStart(e,ei){_dragIdx=ei;_dragStartY=e.touches[0].clientY;var c=document.getElementById('ex-'+ei);if(c)c.classList.add('dragging');e.stopPropagation();}
-function dragMove(e){if(_dragIdx===null)return;var dy=e.touches[0].clientY-_dragStartY;var c=document.getElementById('ex-'+_dragIdx);if(c)c.style.transform='translateY('+dy+'px)';document.querySelectorAll('.ex-card:not(.dragging)').forEach(function(x){x.classList.remove('drag-over');});var under=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);var ov=under?under.closest('.ex-card'):null;if(ov&&ov.id!=='ex-'+_dragIdx)ov.classList.add('drag-over');e.preventDefault();}
-function dragEnd(e){if(_dragIdx===null)return;var c=document.getElementById('ex-'+_dragIdx);if(c){c.classList.remove('dragging');c.style.transform='';}var ov=document.querySelector('.ex-card.drag-over');if(ov){var ti=parseInt(ov.id.replace('ex-',''));ov.classList.remove('drag-over');if(ti!==_dragIdx){var exs=activeWO.exercises;var moved=exs.splice(_dragIdx,1)[0];exs.splice(ti,0,moved);renderWOBody();}}_dragIdx=null;}
+// REORDER EXERCISES with up/down buttons
+function moveEx(ei,dir){
+  const exs=activeWO.exercises;
+  const to=ei+dir;
+  if(to<0||to>=exs.length)return;
+  const tmp=exs[ei];exs[ei]=exs[to];exs[to]=tmp;
+  renderWOBody();
+  setTimeout(()=>{const el=document.getElementById('ex-'+to);if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'});},50);
+}
  
 // WORKOUT BODY
 function renderWOBody(){
   if(!activeWO)return;
   const c=getDayDef(activeWO.dayId).color;
   const prev=activeWO.prevSession;
+  const total=activeWO.exercises.length;
   document.getElementById('wo-body').innerHTML=activeWO.exercises.map((ex,ei)=>{
     const done=ex.sets.filter(s=>s.done).length;
-    // Find prev exercise data
     let prevEx=null;if(prev)(prevEx=(prev.exercises||[]).find(e=>e.name===ex.name));
     const prevSetsStr=prevEx&&prevEx.sets&&prevEx.sets.length?prevEx.sets.filter(s=>s.weight).map(s=>`${s.weight}kg×${s.reps||'?'}`).join(' · '):'';
     return `<div class="ex-card" id="ex-${ei}">
@@ -963,11 +968,13 @@ function renderWOBody(){
           </div>
           ${prevSetsStr?`<div style="font-size:10px;color:var(--muted);margin-top:2px">Vorige: ${prevSetsStr}</div>`:''}
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
           <div class="ex-prog-num" style="color:${done>0&&done>=parseInt(ex.targetSets)?'#CC3800':c}">${done}/${ex.targetSets}</div>
-          <div style="display:flex;gap:4px;">
-            <div class="ex-drag-handle" data-ei="${ei}" ontouchstart="dragStart(event,${ei})" ontouchmove="dragMove(event)" ontouchend="dragEnd(event)"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+          <div style="display:flex;gap:2px;align-items:center;">
+            <div onclick="moveEx(${ei},-1)" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:${ei===0?0.2:0.55};${ei===0?'pointer-events:none;':''}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="18 15 12 9 6 15"/></svg></div>
+            <div onclick="moveEx(${ei},1)" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:${ei===total-1?0.2:0.55};${ei===total-1?'pointer-events:none;':''}"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="6 9 12 15 18 9"/></svg></div>
             <div class="ex-del-btn" onclick="delEx(${ei})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg></div>
+          </div>
         </div>
       </div>
       <div class="ex-sets">${ex.sets.map((s,si)=>`
