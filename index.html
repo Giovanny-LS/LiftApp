@@ -46,7 +46,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrop
 /* AUTH */
 #auth-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 28px;}
 #auth-screen.hidden{display:none;}
-.auth-logo{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;margin-bottom:6px;line-height:1;background:linear-gradient(135deg,#FF4500,#FFB700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.auth-logo{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;margin-bottom:6px;line-height:1;background:linear-gradient(135deg,#FF4500,#FF6A00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .auth-tagline{font-size:12px;color:var(--muted2);font-weight:600;text-transform:uppercase;letter-spacing:2px;margin-bottom:40px;}
 .auth-tabs{display:flex;background:var(--card);border-radius:12px;padding:3px;margin-bottom:24px;width:100%;}
 .auth-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:700;border-radius:9px;cursor:pointer;color:var(--muted2);transition:all .2s;}
@@ -60,8 +60,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Manrop
 .auth-err{font-size:12px;color:#FF4500;text-align:center;min-height:18px;font-weight:600;}
  
 /* SYNC DOT */
-#sync-dot{position:fixed;top:calc(var(--safe-top) + 6px);right:14px;width:7px;height:7px;border-radius:50%;background:#FFB700;z-index:999;opacity:0;transition:opacity .3s;}
-#sync-dot.show{opacity:1;background:#CC3800;}
+#sync-dot{position:fixed;top:calc(var(--safe-top) + 6px);right:14px;width:7px;height:7px;border-radius:50%;background:#CC3800;z-index:999;opacity:0;transition:opacity .3s;}
+#sync-dot.show{opacity:1;}
 #sync-dot.error{background:#FF4500;}
  
 /* VIEWS */
@@ -148,9 +148,9 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .empty-msg{padding:28px 0;text-align:center;color:var(--muted);font-size:13px;line-height:1.8;}
 .month-banner{margin:14px 18px 0;background:linear-gradient(135deg,#1a1a22,#222230);border:1px solid rgba(255,183,0,0.3);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;}
 .month-banner-text{flex:1;}
-.month-banner-title{font-weight:800;font-size:13px;color:#FFB700;}
+.month-banner-title{font-weight:800;font-size:13px;color:#FF4500;}
 .month-banner-sub{font-size:11px;color:var(--muted2);margin-top:2px;}
-.month-banner-btn{background:#FFB700;color:#000;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;flex-shrink:0;}
+.month-banner-btn{background:#FF4500;color:#fff;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;flex-shrink:0;}
  
 /* WORKOUT OVERLAY */
 #workout-overlay{position:absolute;inset:0;background:var(--bg);z-index:200;display:none;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);}
@@ -169,7 +169,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .finish-btn{width:100%;padding:15px;background:var(--green);color:#fff;font-weight:800;font-size:15px;border:none;border-radius:14px;cursor:pointer;font-family:'Manrope',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;}
 .finish-btn svg{width:17px;height:17px;stroke:#000;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
 .wo-pause-btn{width:33px;height:33px;border-radius:50%;background:rgba(255,183,0,0.12);border:1px solid rgba(255,183,0,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;}
-.wo-pause-btn svg{width:14px;height:14px;stroke:#FFB700;fill:none;stroke-width:2.2;stroke-linecap:round;}
+.wo-pause-btn svg{width:14px;height:14px;stroke:#FF6A00;fill:none;stroke-width:2.2;stroke-linecap:round;}
  
 /* REST TIMER */
 .rest-pill{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:10px 14px;margin:10px 0 4px;position:sticky;top:10px;z-index:50;}
@@ -197,7 +197,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .sum-stat-lbl{font-size:9px;color:var(--muted2);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
 .sum-prs{padding:18px 18px 0;}
 .sum-pr-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid rgba(255,183,0,0.2);border-radius:12px;margin-bottom:8px;}
-.sum-pr-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;background:rgba(255,183,0,0.15);color:#FFB700;padding:3px 8px;border-radius:6px;flex-shrink:0;}
+.sum-pr-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;background:rgba(204,56,0,0.15);color:#CC3800;padding:3px 8px;border-radius:6px;flex-shrink:0;}
 .sum-pr-text{font-size:13px;font-weight:700;}
 .sum-pr-val{font-size:11px;color:var(--muted2);margin-top:1px;}
 .sum-note-wrap{padding:18px 18px 0;}
@@ -397,7 +397,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .as-btn svg{width:20px;height:20px;flex-shrink:0;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .as-btn.danger{color:#FF4500;} .as-btn.danger svg{stroke:#FF4500;}
 .as-btn.warn{color:#FFB700;} .as-btn.warn svg{stroke:#FFB700;}
-.as-btn.ok{color:#FFB700;} .as-btn.ok svg{stroke:#FFB700;}
+.as-btn.ok{color:#CC3800;} .as-btn.ok svg{stroke:#CC3800;}
 .as-cancel{text-align:center;padding:14px;font-size:16px;font-weight:800;color:var(--text);cursor:pointer;border-radius:14px;background:var(--card2);margin-top:6px;-webkit-user-select:none;user-select:none;}
 .as-cancel:active{opacity:.7;}
 </style>
@@ -597,7 +597,7 @@ function initIcon(){
   const r=s*0.18;
   ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(s-r,0);ctx.arcTo(s,0,s,r,r);ctx.lineTo(s,s-r);ctx.arcTo(s,s,s-r,s,r);ctx.lineTo(r,s);ctx.arcTo(0,s,0,s-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();
   ctx.fillStyle='#0A0A0B';ctx.fill();
-  const g=ctx.createLinearGradient(0,128,s,s-128);g.addColorStop(0,'#FF4500');g.addColorStop(1,'#FFB700');ctx.fillStyle=g;
+  const g=ctx.createLinearGradient(0,128,s,s-128);g.addColorStop(0,'#FF4500');g.addColorStop(1,'#FF6A00');ctx.fillStyle=g;
   // Bar
   ctx.fillRect(110,234,292,44);
   // Left plate
@@ -829,7 +829,7 @@ function updateRestPill(){
   const c=document.getElementById('rest-count');if(c)c.textContent=fmtDur(restRemaining);
   const circ=2*Math.PI*14;
   const rc=document.getElementById('rest-circle');
-  if(rc){rc.style.strokeDashoffset=circ*(1-restRemaining/restTotal);rc.style.stroke=restRemaining<=10?'#FF4500':'#FFB700';}
+  if(rc){rc.style.strokeDashoffset=circ*(1-restRemaining/restTotal);rc.style.stroke=restRemaining<=10?'#AA2200':'#FF4500';}
   const pill=document.getElementById('rest-pill');
   if(pill&&restRemaining===0)pill.classList.add('done');
 }
@@ -893,7 +893,7 @@ function showSummary(){
   document.getElementById('sum-stats').innerHTML=`
     <div class="sum-stat"><div class="sum-stat-val bb" style="color:${dd.color}">${fmtDur(dur)}</div><div class="sum-stat-lbl">Duur</div></div>
     <div class="sum-stat"><div class="sum-stat-val bb">${vol>9999?(vol/1000).toFixed(1)+'t':vol+'kg'}</div><div class="sum-stat-lbl">Volume</div></div>
-    <div class="sum-stat"><div class="sum-stat-val bb" style="color:#FFB700">${prs.length}</div><div class="sum-stat-lbl">PR's</div></div>`;
+    <div class="sum-stat"><div class="sum-stat-val bb" style="color:#FF4500">${prs.length}</div><div class="sum-stat-lbl">PR's</div></div>`;
   document.getElementById('sum-prs').innerHTML=prs.length?`<div class="sec-label">Persoonlijke records</div>${prs.map(p=>`<div class="sum-pr-item"><div class="sum-pr-badge">PR</div><div><div class="sum-pr-text">${esc(p.name)}</div><div class="sum-pr-val">${p.weight} kg${p.prev?` · vorige: ${p.prev} kg`:' · eerste keer!'}</div></div></div>`).join('')}`:'';
   document.getElementById('sum-note').value='';
   document.getElementById('summary-overlay').classList.add('show');
@@ -938,7 +938,7 @@ function renderWOBody(){
           ${prevSetsStr?`<div style="font-size:10px;color:var(--muted);margin-top:2px">Vorige: ${prevSetsStr}</div>`:''}
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
-          <div class="ex-prog-num" style="color:${done>0&&done>=parseInt(ex.targetSets)?'#FFB700':c}">${done}/${ex.targetSets}</div>
+          <div class="ex-prog-num" style="color:${done>0&&done>=parseInt(ex.targetSets)?'#CC3800':c}">${done}/${ex.targetSets}</div>
           <div style="display:flex;gap:4px;">
             <div class="ex-drag-handle" data-ei="${ei}" ontouchstart="dragStart(event,${ei})" ontouchmove="dragMove(event)" ontouchend="dragEnd(event)"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
             <div class="ex-del-btn" onclick="delEx(${ei})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg></div>
@@ -957,7 +957,7 @@ function renderWOBody(){
     </div>`;
   }).join('')+`<div class="add-ex-btn" onclick="addExercise()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>`;
 }
-function updEx(ei,f,v){if(!activeWO)return;if(f==='targetSets')v=parseInt(v)||1;activeWO.exercises[ei][f]=v;const ex=activeWO.exercises[ei];const done=ex.sets.filter(s=>s.done).length;const n=document.querySelector(`#ex-${ei} .ex-prog-num`);if(n){n.textContent=`${done}/${ex.targetSets}`;n.style.color=done>0&&done>=parseInt(ex.targetSets)?'#FFB700':getDayDef(activeWO.dayId).color;}}
+function updEx(ei,f,v){if(!activeWO)return;if(f==='targetSets')v=parseInt(v)||1;activeWO.exercises[ei][f]=v;const ex=activeWO.exercises[ei];const done=ex.sets.filter(s=>s.done).length;const n=document.querySelector(`#ex-${ei} .ex-prog-num`);if(n){n.textContent=`${done}/${ex.targetSets}`;n.style.color=done>0&&done>=parseInt(ex.targetSets)?'#CC3800':getDayDef(activeWO.dayId).color;}}
 function addExercise(){activeWO.exercises.push({name:'',targetSets:3,targetReps:'8-12',sets:[]});renderWOBody();setTimeout(()=>{const cs=document.querySelectorAll('.ex-card');const l=cs[cs.length-1];if(l){l.scrollIntoView({behavior:'smooth',block:'center'});const i=l.querySelector('.ex-name-inp');if(i)setTimeout(()=>i.focus(),300);}},80);}
 function delEx(ei){if(activeWO.exercises.length<=1){showToast('Minimaal 1 oefening nodig');return;}activeWO.exercises.splice(ei,1);renderWOBody();}
 function addSet(ei){const ex=activeWO.exercises[ei];const prev=ex.sets[ex.sets.length-1];ex.sets.push({weight:prev?prev.weight:'',reps:prev?prev.reps:'',done:false});renderWOBody();setTimeout(()=>{const cc=document.getElementById(`ex-${ei}`);if(cc)cc.scrollIntoView({behavior:'smooth',block:'nearest'});},60);}
@@ -1116,13 +1116,13 @@ function buildBWChart(){
   const pts=data.map((d,i)=>({x:pt.l+(i/(data.length-1))*iW,y:pt.t+iH-((d.weight-minV)/rng)*iH}));
   const lp=pts[pts.length-1];const gid='bwg'+Math.random().toString(36).slice(2,5);
   return `<svg style="width:100%;overflow:visible;margin-top:4px" viewBox="0 0 ${W} ${H}">
-    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFB700" stop-opacity=".3"/><stop offset="100%" stop-color="#FFB700" stop-opacity="0"/></linearGradient></defs>
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#CC3800" stop-opacity=".3"/><stop offset="100%" stop-color="#CC3800" stop-opacity="0"/></linearGradient></defs>
     <text x="${pt.l-4}" y="${pt.t+4}" text-anchor="end" fill="#505060" font-size="9" font-family="Manrope">${maxV}</text>
     <text x="${pt.l-4}" y="${pt.t+iH+4}" text-anchor="end" fill="#505060" font-size="9" font-family="Manrope">${minV}</text>
     <polygon points="${pt.l},${pt.t+iH} ${pts.map(p=>`${p.x},${p.y}`).join(' ')} ${pt.l+iW},${pt.t+iH}" fill="url(#${gid})"/>
-    <polyline points="${pts.map(p=>`${p.x},${p.y}`).join(' ')}" fill="none" stroke="#FFB700" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="${lp.x}" cy="${lp.y}" r="3.5" fill="#FFB700"/>
-    <text x="${lp.x}" y="${lp.y-8}" text-anchor="middle" fill="#FFB700" font-size="9" font-weight="700" font-family="Manrope">${data[data.length-1].weight}kg</text>
+    <polyline points="${pts.map(p=>`${p.x},${p.y}`).join(' ')}" fill="none" stroke="#CC3800" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${lp.x}" cy="${lp.y}" r="3.5" fill="#CC3800"/>
+    <text x="${lp.x}" y="${lp.y-8}" text-anchor="middle" fill="#CC3800" font-size="9" font-weight="700" font-family="Manrope">${data[data.length-1].weight}kg</text>
   </svg>`;
 }
  
@@ -1135,7 +1135,7 @@ function buildProgCard(name,dd,filteredSessions){
   var e1rm=0;STATE.sessions.forEach(function(s){(s.exercises||[]).filter(function(e){return e.name===name;}).forEach(function(e){e.sets.filter(function(st){return st.weight&&st.reps;}).forEach(function(st){var v=get1RM(st.weight,st.reps);if(v>e1rm)e1rm=v;});});});
   // Find goal weight from templates
   var goalW=0;Object.values(STATE.templates).forEach(function(arr){arr.forEach(function(ex){if(ex.name===name&&ex.goalWeight)goalW=ex.goalWeight;});});
-  const diffHtml=diff!=null?(diff>0?`<span style="color:#FFB700">+${diff}kg</span>`:diff<0?`<span style="color:#FF4500">${diff}kg</span>`:`<span style="color:var(--muted2)">${diff}kg</span>`):'';
+  const diffHtml=diff!=null?(diff>0?`<span style="color:#CC3800">+${diff}kg</span>`:diff<0?`<span style="color:#FF4500">${diff}kg</span>`:`<span style="color:var(--muted2)">${diff}kg</span>`):'';
   return`<div class="prog-card">
     <div class="prog-card-name" title="${esc(name)}">${esc(name)}</div>
     <div class="prog-card-pr bb" style="color:${dd.color}">${dispW(pr,true)} <span style="font-size:10px;font-family:'Manrope',sans-serif;font-weight:700">PR</span></div>
@@ -1189,7 +1189,7 @@ function renderSett(){
       <div class="sec-label">Rust timer</div>
       <div class="sett-card">
         <div class="sett-row" style="cursor:default">
-          <div class="sett-row-icon" style="background:#FFB70020"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="sett-row-icon" style="background:#FF450015"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
           <div class="sett-row-info"><div class="sett-row-title">Automatische rust timer</div><div class="sett-row-sub">Start na elke afgevinkte set</div></div>
           <div class="sett-toggle${sets.autoRest?' on':''}" onclick="toggleSetting('autoRest')"></div>
         </div>
