@@ -445,7 +445,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .ob-day-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
 .ob-day-name{font-weight:800;font-size:17px;}
 .ob-day-desc{font-size:12px;color:var(--muted2);margin-top:1px;}
-.ob-ex-row{display:flex;gap:7px;margin-bottom:8px;align-items:center;}
+.ob-ex-row{display:flex;gap:6px;margin-bottom:8px;align-items:center;}
 .ob-ex-inp{background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:10px 12px;flex:1;-webkit-appearance:none;}
 .ob-ex-inp:focus{outline:none;border-color:rgba(255,69,0,0.4);}
 .ob-ex-inp::placeholder{color:var(--muted);}
@@ -664,10 +664,34 @@ onAuthStateChanged(auth, async (user) => {
 <script>
 const SPLIT_PRESETS = {
   ppla:{label:'Push / Pull / Legs / Arms',days:[
-    {id:'push',name:'Push',short:'Borst & Schouders',label:'Borst · Schouders · Triceps',color:'#FF4500',exercises:[{name:'Bench Press',targetSets:4,targetReps:'8-10'},{name:'Overhead Press',targetSets:4,targetReps:'8-10'},{name:'Incline DB Press',targetSets:3,targetReps:'10-12'},{name:'Lateral Raises',targetSets:4,targetReps:'12-15'},{name:'Tricep Pushdown',targetSets:3,targetReps:'12-15'},{name:'Skull Crushers',targetSets:3,targetReps:'10-12'}]},
-    {id:'pull',name:'Pull',short:'Rug & Biceps',label:'Rug · Biceps',color:'#3B82F6',exercises:[{name:'Deadlift',targetSets:4,targetReps:'5'},{name:'Lat Pulldown',targetSets:4,targetReps:'8-10'},{name:'Seated Row',targetSets:4,targetReps:'10-12'},{name:'Face Pulls',targetSets:3,targetReps:'15'},{name:'Barbell Curl',targetSets:4,targetReps:'10-12'},{name:'Hammer Curls',targetSets:3,targetReps:'12'}]},
-    {id:'legs',name:'Legs',short:'Benen',label:'Quads · Hamstrings · Glutes',color:'#8B5CF6',exercises:[{name:'Squat',targetSets:4,targetReps:'6-8'},{name:'Romanian Deadlift',targetSets:4,targetReps:'8-10'},{name:'Leg Press',targetSets:4,targetReps:'10-12'},{name:'Leg Curl',targetSets:3,targetReps:'12-15'},{name:'Bulgarian Split Squat',targetSets:3,targetReps:'10'},{name:'Calf Raises',targetSets:4,targetReps:'15-20'}]},
-    {id:'arms',name:'Arms',short:'Armen',label:'Biceps · Triceps',color:'#10B981',exercises:[{name:'EZ-Bar Curl',targetSets:4,targetReps:'10-12'},{name:'Incline DB Curl',targetSets:3,targetReps:'12'},{name:'Concentration Curl',targetSets:3,targetReps:'12'},{name:'Close Grip Bench',targetSets:4,targetReps:'10-12'},{name:'Overhead Tricep Ext.',targetSets:3,targetReps:'12'},{name:'Dips',targetSets:3,targetReps:'10-12'}]}
+    {id:'push',name:'Push',short:'Borst & Schouders',label:'Borst · Schouders · Triceps',color:'#FF4500',exercises:[
+      {name:'Bench Press',targetSets:4,targetReps:'6-8'},
+      {name:'Overhead Press',targetSets:3,targetReps:'8-10'},
+      {name:'Incline DB Press',targetSets:3,targetReps:'10-12'},
+      {name:'Lateral Raises',targetSets:4,targetReps:'12-15'},
+      {name:'Tricep Pushdown',targetSets:3,targetReps:'12-15'}
+    ]},
+    {id:'pull',name:'Pull',short:'Rug & Biceps',label:'Rug · Biceps',color:'#3B82F6',exercises:[
+      {name:'Deadlift',targetSets:3,targetReps:'5'},
+      {name:'Lat Pulldown',targetSets:4,targetReps:'8-10'},
+      {name:'Seated Cable Row',targetSets:3,targetReps:'10-12'},
+      {name:'Barbell Curl',targetSets:3,targetReps:'10-12'},
+      {name:'Hammer Curl',targetSets:3,targetReps:'12'}
+    ]},
+    {id:'legs',name:'Legs',short:'Benen',label:'Quads · Hamstrings · Glutes',color:'#8B5CF6',exercises:[
+      {name:'Squat',targetSets:4,targetReps:'6-8'},
+      {name:'Romanian Deadlift',targetSets:3,targetReps:'8-10'},
+      {name:'Leg Press',targetSets:3,targetReps:'10-12'},
+      {name:'Leg Curl',targetSets:3,targetReps:'12-15'},
+      {name:'Calf Raises',targetSets:4,targetReps:'15-20'}
+    ]},
+    {id:'arms',name:'Arms',short:'Armen',label:'Biceps · Triceps',color:'#10B981',exercises:[
+      {name:'EZ-Bar Curl',targetSets:4,targetReps:'10-12'},
+      {name:'Incline DB Curl',targetSets:3,targetReps:'12'},
+      {name:'Close Grip Bench Press',targetSets:4,targetReps:'8-10'},
+      {name:'Overhead Tricep Extension',targetSets:3,targetReps:'12'},
+      {name:'Face Pulls',targetSets:3,targetReps:'15'}
+    ]}
   ]},
   ppl:{label:'Push / Pull / Legs',days:[
     {id:'push',name:'Push',short:'Borst & Schouders',label:'Borst · Schouders · Triceps',color:'#FF4500',exercises:[{name:'Bench Press',targetSets:4,targetReps:'8-10'},{name:'Overhead Press',targetSets:4,targetReps:'8-10'},{name:'Incline DB Press',targetSets:3,targetReps:'10-12'},{name:'Lateral Raises',targetSets:4,targetReps:'12-15'},{name:'Tricep Pushdown',targetSets:3,targetReps:'12-15'}]},
@@ -708,27 +732,84 @@ function showSync(on=true,err=false){const d=document.getElementById('sync-dot')
  
 // ── ICON ──────────────────────────────────────────────────────
 function initIcon(){
-  const s=512,c=document.createElement('canvas');c.width=c.height=s;const ctx=c.getContext('2d');
-  // Rounded background
-  const r=s*0.18;
-  ctx.beginPath();ctx.moveTo(r,0);ctx.lineTo(s-r,0);ctx.arcTo(s,0,s,r,r);ctx.lineTo(s,s-r);ctx.arcTo(s,s,s-r,s,r);ctx.lineTo(r,s);ctx.arcTo(0,s,0,s-r,r);ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);ctx.closePath();
-  ctx.fillStyle='#0A0A0B';ctx.fill();
-  const g=ctx.createLinearGradient(0,128,s,s-128);g.addColorStop(0,'#FF4500');g.addColorStop(1,'#FF6A00');ctx.fillStyle=g;
-  // Bar
-  ctx.fillRect(110,234,292,44);
-  // Left plate
-  const lp=ctx.beginPath.bind(ctx);
-  function rr(x,y,w,h,rad){ctx.beginPath();ctx.moveTo(x+rad,y);ctx.lineTo(x+w-rad,y);ctx.arcTo(x+w,y,x+w,y+rad,rad);ctx.lineTo(x+w,y+h-rad);ctx.arcTo(x+w,y+h,x+w-rad,y+h,rad);ctx.lineTo(x+rad,y+h);ctx.arcTo(x,y+h,x,y+h-rad,rad);ctx.lineTo(x,y+rad);ctx.arcTo(x,y,x+rad,y,rad);ctx.closePath();ctx.fill();}
-  rr(66,182,52,148,10);  // left plate
-  rr(394,182,52,148,10); // right plate
-  ctx.fillRect(118,208,28,96); // left collar
-  ctx.fillRect(366,208,28,96); // right collar
-  const url=c.toDataURL('image/png');
-  let al=document.getElementById('ati');if(!al){al=document.createElement('link');al.id='ati';al.rel='apple-touch-icon';document.head.appendChild(al);}al.href=url;
-  let fl=document.getElementById('fav');if(!fl){fl=document.createElement('link');fl.id='fav';fl.rel='icon';fl.type='image/png';document.head.appendChild(fl);}fl.href=url;
-  const mf={name:'LIFT',short_name:'LIFT',display:'standalone',background_color:'#0A0A0B',theme_color:'#0A0A0B',start_url:'./',icons:[{src:url,sizes:'512x512',type:'image/png'}]};
+  const s=512;
+  const cv=document.createElement('canvas');cv.width=cv.height=s;
+  const ctx=cv.getContext('2d');
+ 
+  // Rounded rect background
+  const rad=s*0.22;
+  ctx.beginPath();
+  ctx.moveTo(rad,0);ctx.lineTo(s-rad,0);ctx.arcTo(s,0,s,rad,rad);
+  ctx.lineTo(s,s-rad);ctx.arcTo(s,s,s-rad,s,rad);
+  ctx.lineTo(rad,s);ctx.arcTo(0,s,0,s-rad,rad);
+  ctx.lineTo(0,rad);ctx.arcTo(0,0,rad,0,rad);
+  ctx.closePath();
+  // Deep dark bg
+  ctx.fillStyle='#0C0C0E';ctx.fill();
+ 
+  // Subtle inner vignette
+  const vg=ctx.createRadialGradient(s/2,s/2,s*0.1,s/2,s/2,s*0.7);
+  vg.addColorStop(0,'rgba(255,69,0,0.06)');vg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=vg;ctx.fill();
+ 
+  // Helper: rounded rect
+  function rr(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+    ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+    ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+    ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
+    ctx.closePath();ctx.fill();
+  }
+ 
+  // Orange gradient
+  const og=ctx.createLinearGradient(0,s*0.25,s,s*0.75);
+  og.addColorStop(0,'#FF4500');og.addColorStop(1,'#CC3000');
+  ctx.fillStyle=og;
+ 
+  // Barbell bar (thin, centered)
+  const barY=s/2-18,barH=36;
+  rr(96,barY,s-192,barH,barH/2);
+ 
+  // Plates: left outer
+  rr(56,s/2-90,52,180,10);
+  // Plates: left inner
+  rr(114,s/2-68,30,136,7);
+  // Plates: right inner
+  rr(s-144,s/2-68,30,136,7);
+  // Plates: right outer
+  rr(s-108,s/2-90,52,180,10);
+ 
+  // Collars
+  ctx.fillStyle='rgba(255,120,60,0.55)';
+  rr(150,s/2-38,18,76,4);
+  rr(s-168,s/2-38,18,76,4);
+ 
+  // LIFT text
+  ctx.fillStyle='#FFFFFF';
+  ctx.font=`bold ${s*0.19}px -apple-system,Helvetica,Arial,sans-serif`;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.letterSpacing='8px';
+ 
+  // White glow
+  ctx.shadowColor='rgba(255,255,255,0.12)';
+  ctx.shadowBlur=20;
+  ctx.fillText('LIFT',s/2+6,s*0.78);
+  ctx.shadowBlur=0;
+ 
+  const url=cv.toDataURL('image/png');
+  let al=document.getElementById('ati');
+  if(!al){al=document.createElement('link');al.id='ati';al.rel='apple-touch-icon';document.head.appendChild(al);}
+  al.href=url;
+  let fl=document.getElementById('fav');
+  if(!fl){fl=document.createElement('link');fl.id='fav';fl.rel='icon';fl.type='image/png';document.head.appendChild(fl);}
+  fl.href=url;
+  const mf={name:'LIFT',short_name:'LIFT',display:'standalone',background_color:'#0C0C0E',theme_color:'#0C0C0E',start_url:'./',icons:[{src:url,sizes:'512x512',type:'image/png'}]};
   const mb=new Blob([JSON.stringify(mf)],{type:'application/json'});
-  let ml=document.getElementById('mani');if(!ml){ml=document.createElement('link');ml.id='mani';ml.rel='manifest';document.head.appendChild(ml);}ml.href=URL.createObjectURL(mb);
+  let ml=document.getElementById('mani');
+  if(!ml){ml=document.createElement('link');ml.id='mani';ml.rel='manifest';document.head.appendChild(ml);}
+  ml.href=URL.createObjectURL(mb);
 }
  
 // ── AUTH ──────────────────────────────────────────────────────
@@ -1548,24 +1629,39 @@ function renderObStep2(){
     return `<div class="ob-day-section">
       <div class="ob-day-hdr"><div class="ob-day-dot" style="background:${d.color}"></div>
         <div><div class="ob-day-name">${d.name}</div><div class="ob-day-desc">${d.label}</div></div></div>
-      <div class="ob-col-hdr">
+      <div class="ob-col-hdr" style="padding-left:22px">
         <div class="ob-col-lbl" style="flex:1">Oefening</div>
         <div class="ob-col-lbl ob-ex-sets">Sets</div>
         <div class="ob-col-lbl ob-ex-reps">Reps</div>
         <div style="width:30px"></div>
       </div>
-      <div id="ob-exlist-${d.id}">${(obExercises[d.id]||[]).map((ex,ei)=>obExRow(d.id,ei,ex)).join('')}</div>
+      <div id="ob-exlist-${d.id}">${(obExercises[d.id]||[]).map((ex,ei)=>obExRow(d.id,ei,ex,(obExercises[d.id]||[]).length)).join('')}</div>
       <div class="ob-add-ex" onclick="obAddEx('${d.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>
     </div>`;
   }).join('');
 }
-function obExRow(dayId,ei,ex){
-  return `<div class="ob-ex-row">
+function obExRow(dayId,ei,ex,total){
+  return `<div class="ob-ex-row" id="ob-exrow-${dayId}-${ei}">
+    <div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0;">
+      <div onclick="obMoveEx('${dayId}',${ei},-1)" style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:${ei===0?0.2:0.5};${ei===0?'pointer-events:none':''}">
+        <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="18 15 12 9 6 15"/></svg>
+      </div>
+      <div onclick="obMoveEx('${dayId}',${ei},1)" style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:${ei===total-1?0.2:0.5};${ei===total-1?'pointer-events:none':''}">
+        <svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
     <input class="ob-ex-inp" type="text" placeholder="Bijv. Bench Press" value="${esc(ex.name||'')}" onblur="obUpdEx('${dayId}',${ei},'name',this.value)">
     <input class="ob-ex-inp ob-ex-sets" type="number" inputmode="numeric" placeholder="3" value="${ex.targetSets||3}" onblur="obUpdEx('${dayId}',${ei},'targetSets',this.value)">
     <input class="ob-ex-inp ob-ex-reps" type="text" placeholder="8-12" value="${esc(ex.targetReps||'')}" onblur="obUpdEx('${dayId}',${ei},'targetReps',this.value)">
     <div class="ob-ex-del" onclick="obDelEx('${dayId}',${ei})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
   </div>`;
+}
+function obMoveEx(dayId,ei,dir){
+  const exs=obExercises[dayId];if(!exs)return;
+  const to=ei+dir;if(to<0||to>=exs.length)return;
+  const tmp=exs[ei];exs[ei]=exs[to];exs[to]=tmp;
+  const cont=document.getElementById('ob-exlist-'+dayId);
+  if(cont)cont.innerHTML=exs.map((ex,i)=>obExRow(dayId,i,ex,exs.length)).join('');
 }
 function obUpdEx(dayId,ei,f,v){if(!obExercises[dayId])return;if(f==='targetSets')v=parseInt(v)||1;obExercises[dayId][ei][f]=v;}
 function obAddEx(dayId){
@@ -1579,7 +1675,7 @@ function obDelEx(dayId,ei){
   if(!obExercises[dayId]||obExercises[dayId].length<=1){showToast('Minimaal 1 oefening');return;}
   obExercises[dayId].splice(ei,1);
   const cont=document.getElementById('ob-exlist-'+dayId);
-  if(cont)cont.innerHTML=obExercises[dayId].map((ex,i)=>obExRow(dayId,i,ex)).join('');
+  if(cont)cont.innerHTML=obExercises[dayId].map((ex,i)=>obExRow(dayId,i,ex,obExercises[dayId].length)).join('');
 }
 function obNext(){if(obStep===1)renderObStep2();else obFinish();}
 function obBack(){if(obStep===2)renderObStep1();}
