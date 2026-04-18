@@ -418,6 +418,45 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .as-btn.ok{color:#CC3800;} .as-btn.ok svg{stroke:#CC3800;}
 .as-cancel{text-align:center;padding:14px;font-size:16px;font-weight:800;color:var(--text);cursor:pointer;border-radius:14px;background:var(--card2);margin-top:6px;-webkit-user-select:none;user-select:none;}
 .as-cancel:active{opacity:.7;}
+ 
+/* ONBOARDING */
+#onboarding{position:fixed;inset:0;z-index:900;background:var(--bg);display:none;flex-direction:column;overflow:hidden;}
+#onboarding.show{display:flex;}
+.ob-step{flex:1;overflow-y:auto;padding:calc(var(--safe-top)+20px) 22px calc(var(--safe-bot)+100px);display:none;}
+.ob-step.active{display:block;}
+.ob-step::-webkit-scrollbar{display:none;}
+.ob-hdr{margin-bottom:28px;}
+.ob-step-label{font-size:11px;color:var(--muted2);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;}
+.ob-title{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:1.5px;line-height:1.1;}
+.ob-sub{font-size:14px;color:var(--muted2);margin-top:8px;line-height:1.6;}
+.ob-split-card{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:all .15s;}
+.ob-split-card.selected{border-color:#FF4500;background:rgba(255,69,0,0.06);}
+.ob-split-card:active{transform:scale(0.98);}
+.ob-split-name{font-weight:800;font-size:16px;margin-bottom:3px;}
+.ob-split-desc{font-size:12px;color:var(--muted2);}
+.ob-split-days{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.ob-split-day{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.ob-footer{position:absolute;bottom:0;left:0;right:0;padding:12px 22px calc(var(--safe-bot)+12px);background:var(--bg);border-top:1px solid var(--border);}
+.ob-btn{width:100%;padding:16px;background:#FF4500;color:#fff;font-weight:800;font-size:16px;border:none;border-radius:14px;cursor:pointer;font-family:'Manrope',sans-serif;}
+.ob-btn:disabled{opacity:.4;}
+.ob-btn-sec{width:100%;padding:13px;background:transparent;color:var(--muted2);font-weight:700;font-size:14px;border:none;border-radius:14px;cursor:pointer;font-family:'Manrope',sans-serif;margin-top:6px;}
+.ob-day-section{margin-bottom:24px;}
+.ob-day-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.ob-day-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.ob-day-name{font-weight:800;font-size:17px;}
+.ob-day-desc{font-size:12px;color:var(--muted2);margin-top:1px;}
+.ob-ex-row{display:flex;gap:7px;margin-bottom:8px;align-items:center;}
+.ob-ex-inp{background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:10px 12px;flex:1;-webkit-appearance:none;}
+.ob-ex-inp:focus{outline:none;border-color:rgba(255,69,0,0.4);}
+.ob-ex-inp::placeholder{color:var(--muted);}
+.ob-ex-sets{width:44px;text-align:center;}
+.ob-ex-reps{width:54px;text-align:center;}
+.ob-ex-del{width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.5;flex-shrink:0;}
+.ob-ex-del svg{width:14px;height:14px;stroke:#FF4500;fill:none;stroke-width:2;stroke-linecap:round;}
+.ob-add-ex{display:flex;align-items:center;gap:6px;padding:9px 12px;background:var(--card2);border:1px dashed rgba(255,255,255,0.1);border-radius:10px;cursor:pointer;color:var(--muted2);font-size:12px;font-weight:700;margin-bottom:4px;}
+.ob-add-ex svg{width:13px;height:13px;stroke:var(--muted2);fill:none;stroke-width:2.5;stroke-linecap:round;}
+.ob-col-hdr{display:flex;gap:7px;margin-bottom:6px;padding:0 37px 0 0;}
+.ob-col-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);text-align:center;}
 </style>
 </head>
 <body>
@@ -434,6 +473,32 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
     <input class="auth-inp" id="auth-pass" type="password" autocomplete="current-password" placeholder="Wachtwoord">
     <div class="auth-err" id="auth-err"></div>
     <button class="auth-btn" id="auth-submit" onclick="doAuth()">Inloggen</button>
+  </div>
+</div>
+ 
+ 
+<div id="onboarding">
+  <!-- Step 1: choose split -->
+  <div class="ob-step active" id="ob-step-1">
+    <div class="ob-hdr">
+      <div class="ob-step-label">Stap 1 van 2</div>
+      <div class="ob-title bb">Kies je<br>trainingsschema</div>
+      <div class="ob-sub">Selecteer de split die bij jou past. Je kunt dit later altijd aanpassen.</div>
+    </div>
+    <div id="ob-split-list"></div>
+  </div>
+  <!-- Step 2: fill exercises -->
+  <div class="ob-step" id="ob-step-2">
+    <div class="ob-hdr">
+      <div class="ob-step-label">Stap 2 van 2</div>
+      <div class="ob-title bb">Vul je<br>oefeningen in</div>
+      <div class="ob-sub">Pas de standaard oefeningen aan of laat ze staan. Dit zijn je startpunten.</div>
+    </div>
+    <div id="ob-exercises-list"></div>
+  </div>
+  <div class="ob-footer">
+    <button class="ob-btn" id="ob-next-btn" onclick="obNext()">Volgende &rarr;</button>
+    <button class="ob-btn-sec" id="ob-back-btn" style="display:none" onclick="obBack()">Terug</button>
   </div>
 </div>
  
@@ -546,17 +611,48 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     window._currentUID = user.uid;
     window._currentEmail = user.email;
+    // Load from localStorage immediately (fast, works offline)
+    const cached = localStorage.getItem('lift_cache_'+user.uid);
+    if(cached){
+      try{
+        window.STATE = JSON.parse(cached);
+        if(!window.STATE.customSplit) window.STATE.customSplit = window.defaultCustomSplit();
+        if(!window.STATE.settings) window.STATE.settings = window.defaultSettings();
+        if(!window.STATE.bodyWeights) window.STATE.bodyWeights = [];
+      }catch(e){ window.STATE = window.freshState(); }
+    } else {
+      window.STATE = window.freshState();
+    }
+ 
+    // Show app immediately with cached data
+    const isNewUser = !cached;
+    document.getElementById('auth-screen').classList.add('hidden');
+    if(isNewUser){
+      document.getElementById('app').style.display = 'block';
+      window.showOnboarding();
+    } else {
+      document.getElementById('app').style.display = 'block';
+      window.initApp();
+    }
+ 
+    // Sync from Firestore in background
     try {
       const snap = await getDoc(doc(db, 'users', user.uid, 'data', 'state'));
-      if (snap.exists()) { window.STATE = snap.data(); if (!window.STATE.customSplit) window.STATE.customSplit = window.defaultCustomSplit(); if (!window.STATE.settings) window.STATE.settings = window.defaultSettings(); if (!window.STATE.bodyWeights) window.STATE.bodyWeights = []; }
-      else { window.STATE = window.freshState(); }
-    } catch(e) {
-      const cached = localStorage.getItem('lift_cache_'+user.uid);
-      window.STATE = cached ? JSON.parse(cached) : window.freshState();
-    }
-    document.getElementById('auth-screen').classList.add('hidden');
-    document.getElementById('app').style.display = 'block';
-    window.initApp();
+      if(snap.exists()){
+        const fresh = snap.data();
+        // Only update if Firestore has more sessions than local cache
+        if(!fresh.sessions) fresh.sessions = [];
+        if(!window.STATE.sessions) window.STATE.sessions = [];
+        if(fresh.sessions.length > window.STATE.sessions.length){
+          window.STATE = fresh;
+          if(!window.STATE.customSplit) window.STATE.customSplit = window.defaultCustomSplit();
+          if(!window.STATE.settings) window.STATE.settings = window.defaultSettings();
+          if(!window.STATE.bodyWeights) window.STATE.bodyWeights = [];
+          localStorage.setItem('lift_cache_'+user.uid, JSON.stringify(window.STATE));
+          if(!isNewUser) window.renderDash();
+        }
+      }
+    } catch(e){ /* offline, use cache */ }
   } else {
     window._currentUID = null;
     document.getElementById('app').style.display = 'none';
@@ -597,14 +693,16 @@ window.STATE=window.freshState();
  
 let saveTimer=null;
 function saveState(){
+  // Save to localStorage IMMEDIATELY (survives app close/refresh)
   if(window._currentUID)localStorage.setItem('lift_cache_'+window._currentUID,JSON.stringify(STATE));
+  // Debounce Firestore (network) write
   clearTimeout(saveTimer);
   saveTimer=setTimeout(async()=>{
     if(!window._currentUID||!window._setDoc)return;
     showSync();
     try{await window._setDoc('users/'+window._currentUID+'/data/state',STATE);showSync(false);}
     catch(e){showSync(false,true);}
-  },1500);
+  },2000);
 }
 function showSync(on=true,err=false){const d=document.getElementById('sync-dot');if(!d)return;d.classList.toggle('show',on||err);d.classList.toggle('error',err);}
  
@@ -761,7 +859,7 @@ function buildWeeklyChart(){
   return '<div class="weekly-chart-wrap"><div class="wc-hdr"><div class="wc-title">Deze week</div><div class="wc-total bb">'+(tot>999?(tot/1000).toFixed(1)+'t':tot>0?tot.toLocaleString()+' kg':'Geen data')+'</div></div><div class="wc-bars">'+bars+'</div></div>';
 }
  
-function renderDash(){
+window.renderDash = function renderDash(){
   const nt=getNext(),dd=getDayDef(nt),now=new Date();
   const recent=[...STATE.sessions].reverse().slice(0,4);
   const dN=['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
@@ -929,7 +1027,7 @@ function saveSummary(){
   if(!pendingSummary||!activeWO)return;
   const note=document.getElementById('sum-note').value.trim();
   STATE.sessions.push({id:Date.now(),type:activeWO.dayId,date:Date.now(),duration:pendingSummary.dur,exercises:pendingSummary.exercises,note:note||''});
-  STATE.templates[activeWO.dayId]=activeWO.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));
+  // Templates stay fixed from onboarding — don't overwrite here
   saveState();closeWorkout();nav('dash');
 }
  
@@ -1414,6 +1512,93 @@ function exportPDF(monthKey){
   }catch(err){showToast('PDF export mislukt');console.error(err);}
 }
 function hexToRgb(hex){return[parseInt(hex.slice(1,3),16),parseInt(hex.slice(3,5),16),parseInt(hex.slice(5,7),16)];}
+ 
+// ── ONBOARDING ────────────────────────────────────────────────
+let obStep=1,obSplitId='ppla',obExercises={};
+window.showOnboarding=function(){
+  obStep=1;obSplitId='ppla';buildObExercises('ppla');renderObStep1();
+  document.getElementById('onboarding').classList.add('show');
+};
+function buildObExercises(id){
+  obExercises={};
+  const days=SPLIT_PRESETS[id].days;
+  days.forEach(d=>{obExercises[d.id]=d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));});
+}
+function renderObStep1(){
+  obStep=1;
+  document.getElementById('ob-step-1').classList.add('active');
+  document.getElementById('ob-step-2').classList.remove('active');
+  document.getElementById('ob-next-btn').textContent='Volgende →';
+  document.getElementById('ob-back-btn').style.display='none';
+  document.getElementById('ob-split-list').innerHTML=Object.entries(SPLIT_PRESETS).map(([k,v])=>{
+    const pills=v.days.map(d=>`<div class="ob-split-day" style="background:${d.color}22;color:${d.color}">${d.name}</div>`).join('');
+    return `<div class="ob-split-card${obSplitId===k?' selected':''}" onclick="obSelectSplit('${k}')">
+      <div class="ob-split-name">${v.label}</div>
+      <div class="ob-split-desc">${v.days.length} dagen per cyclus</div>
+      <div class="ob-split-days">${pills}</div>
+    </div>`;
+  }).join('');
+}
+function obSelectSplit(id){
+  obSplitId=id;buildObExercises(id);
+  document.querySelectorAll('.ob-split-card').forEach((el,i)=>{el.classList.toggle('selected',Object.keys(SPLIT_PRESETS)[i]===id);});
+}
+function renderObStep2(){
+  obStep=2;
+  document.getElementById('ob-step-1').classList.remove('active');
+  document.getElementById('ob-step-2').classList.add('active');
+  document.getElementById('ob-next-btn').textContent='Begin met trainen';
+  document.getElementById('ob-back-btn').style.display='block';
+  const days=SPLIT_PRESETS[obSplitId].days;
+  document.getElementById('ob-exercises-list').innerHTML=days.map(d=>{
+    return `<div class="ob-day-section">
+      <div class="ob-day-hdr"><div class="ob-day-dot" style="background:${d.color}"></div>
+        <div><div class="ob-day-name">${d.name}</div><div class="ob-day-desc">${d.label}</div></div></div>
+      <div class="ob-col-hdr">
+        <div class="ob-col-lbl" style="flex:1">Oefening</div>
+        <div class="ob-col-lbl ob-ex-sets">Sets</div>
+        <div class="ob-col-lbl ob-ex-reps">Reps</div>
+        <div style="width:30px"></div>
+      </div>
+      <div id="ob-exlist-${d.id}">${(obExercises[d.id]||[]).map((ex,ei)=>obExRow(d.id,ei,ex)).join('')}</div>
+      <div class="ob-add-ex" onclick="obAddEx('${d.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>
+    </div>`;
+  }).join('');
+}
+function obExRow(dayId,ei,ex){
+  return `<div class="ob-ex-row">
+    <input class="ob-ex-inp" type="text" placeholder="Bijv. Bench Press" value="${esc(ex.name||'')}" onblur="obUpdEx('${dayId}',${ei},'name',this.value)">
+    <input class="ob-ex-inp ob-ex-sets" type="number" inputmode="numeric" placeholder="3" value="${ex.targetSets||3}" onblur="obUpdEx('${dayId}',${ei},'targetSets',this.value)">
+    <input class="ob-ex-inp ob-ex-reps" type="text" placeholder="8-12" value="${esc(ex.targetReps||'')}" onblur="obUpdEx('${dayId}',${ei},'targetReps',this.value)">
+    <div class="ob-ex-del" onclick="obDelEx('${dayId}',${ei})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+  </div>`;
+}
+function obUpdEx(dayId,ei,f,v){if(!obExercises[dayId])return;if(f==='targetSets')v=parseInt(v)||1;obExercises[dayId][ei][f]=v;}
+function obAddEx(dayId){
+  if(!obExercises[dayId])obExercises[dayId]=[];
+  const ei=obExercises[dayId].length;
+  obExercises[dayId].push({name:'',targetSets:3,targetReps:'8-12'});
+  const cont=document.getElementById('ob-exlist-'+dayId);
+  if(cont){const d=document.createElement('div');d.innerHTML=obExRow(dayId,ei,obExercises[dayId][ei]);cont.appendChild(d.firstElementChild);}
+}
+function obDelEx(dayId,ei){
+  if(!obExercises[dayId]||obExercises[dayId].length<=1){showToast('Minimaal 1 oefening');return;}
+  obExercises[dayId].splice(ei,1);
+  const cont=document.getElementById('ob-exlist-'+dayId);
+  if(cont)cont.innerHTML=obExercises[dayId].map((ex,i)=>obExRow(dayId,i,ex)).join('');
+}
+function obNext(){if(obStep===1)renderObStep2();else obFinish();}
+function obBack(){if(obStep===2)renderObStep1();}
+function obFinish(){
+  STATE.splitId=obSplitId;STATE.templates={};
+  SPLIT_PRESETS[obSplitId].days.forEach(d=>{
+    const exs=(obExercises[d.id]||d.exercises).map(e=>({name:(e.name||'').trim(),targetSets:parseInt(e.targetSets)||3,targetReps:e.targetReps||'8-12'})).filter(e=>e.name);
+    STATE.templates[d.id]=exs.length?exs:d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));
+  });
+  saveState();
+  document.getElementById('onboarding').classList.remove('show');
+  window.initApp();
+}
  
 // ── INIT ──────────────────────────────────────────────────────
 window.initApp=function(){
