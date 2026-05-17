@@ -423,7 +423,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 /* ONBOARDING */
 #onboarding{position:fixed;inset:0;z-index:900;background:var(--bg);display:none;flex-direction:column;overflow:hidden;}
 #onboarding.show{display:flex;}
-.ob-step{flex:1;overflow-y:auto;padding:calc(var(--safe-top)+20px) 22px calc(var(--safe-bot)+200px);display:none;}
+.ob-step{flex:1;overflow-y:auto;padding:calc(var(--safe-top)+20px) 22px 20px;display:none;}
 .ob-step.active{display:block;}
 .ob-step::-webkit-scrollbar{display:none;}
 .ob-hdr{margin-bottom:28px;}
@@ -437,7 +437,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .ob-split-desc{font-size:12px;color:var(--muted2);}
 .ob-split-days{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
 .ob-split-day{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
-.ob-footer{position:fixed;bottom:0;left:0;right:0;padding:12px 22px calc(var(--safe-bot)+12px);background:var(--bg);border-top:1px solid var(--border);z-index:950;}
+.ob-footer{padding:16px 0 calc(var(--safe-bot)+8px);background:var(--bg);border-top:1px solid var(--border);}
 .ob-btn{width:100%;padding:16px;background:#FF4500;color:#fff;font-weight:800;font-size:16px;border:none;border-radius:14px;cursor:pointer;font-family:'Manrope',sans-serif;}
 .ob-btn:disabled{opacity:.4;}
 .ob-btn-sec{width:100%;padding:13px;background:transparent;color:var(--muted2);font-weight:700;font-size:14px;border:none;border-radius:14px;cursor:pointer;font-family:'Manrope',sans-serif;margin-top:6px;}
@@ -496,8 +496,12 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
       <div class="ob-sub">Pas de standaard oefeningen aan of laat ze staan. Dit zijn je startpunten.</div>
     </div>
     <div id="ob-exercises-list"></div>
+    <div class="ob-footer">
+      <button class="ob-btn" id="ob-next-btn-2" onclick="obNext()">Begin met trainen</button>
+      <button class="ob-btn-sec" id="ob-back-btn-2" onclick="obBack()">Terug</button>
+    </div>
   </div>
-  <div class="ob-footer">
+  <div class="ob-footer" id="ob-footer-1" style="position:fixed;bottom:0;left:0;right:0;padding:12px 22px calc(var(--safe-bot)+12px);background:var(--bg);border-top:1px solid var(--border);z-index:950;">
     <button class="ob-btn" id="ob-next-btn" onclick="obNext()">Volgende &rarr;</button>
     <button class="ob-btn-sec" id="ob-back-btn" style="display:none" onclick="obBack()">Terug</button>
   </div>
@@ -1659,6 +1663,7 @@ function renderObStep1(){
   document.getElementById('ob-step-2').classList.remove('active');
   document.getElementById('ob-next-btn').textContent='Volgende →';
   document.getElementById('ob-back-btn').style.display='none';
+  document.getElementById('ob-footer-1').style.display='block';
   document.getElementById('ob-split-list').innerHTML=Object.entries(SPLIT_PRESETS).map(([k,v])=>{
     const pills=v.days.map(d=>`<div class="ob-split-day" style="background:${d.color}22;color:${d.color}">${d.name}</div>`).join('');
     return `<div class="ob-split-card${obSplitId===k?' selected':''}" onclick="obSelectSplit('${k}')">
@@ -1691,6 +1696,7 @@ function renderObStep2(){
   obStep=2;
   document.getElementById('ob-step-1').classList.remove('active');
   document.getElementById('ob-step-2').classList.add('active');
+  document.getElementById('ob-footer-1').style.display='none';
   document.getElementById('ob-next-btn').textContent='Begin met trainen';
   document.getElementById('ob-back-btn').style.display='block';
   const days=SPLIT_PRESETS[obSplitId].days;
