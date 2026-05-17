@@ -736,7 +736,7 @@ function initIcon(){
   const cv=document.createElement('canvas');cv.width=cv.height=s;
   const ctx=cv.getContext('2d');
  
-  // Rounded rect background
+  // ── Background ──────────────────────────────────────────────
   const rad=s*0.22;
   ctx.beginPath();
   ctx.moveTo(rad,0);ctx.lineTo(s-rad,0);ctx.arcTo(s,0,s,rad,rad);
@@ -744,59 +744,56 @@ function initIcon(){
   ctx.lineTo(rad,s);ctx.arcTo(0,s,0,s-rad,rad);
   ctx.lineTo(0,rad);ctx.arcTo(0,0,rad,0,rad);
   ctx.closePath();
-  // Deep dark bg
   ctx.fillStyle='#0C0C0E';ctx.fill();
  
-  // Subtle inner vignette
-  const vg=ctx.createRadialGradient(s/2,s/2,s*0.1,s/2,s/2,s*0.7);
-  vg.addColorStop(0,'rgba(255,69,0,0.06)');vg.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=vg;ctx.fill();
+  // Subtle warm inner glow
+  const glow=ctx.createRadialGradient(s/2,s/2,40,s/2,s/2,s*0.65);
+  glow.addColorStop(0,'rgba(255,69,0,0.10)');
+  glow.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=glow;ctx.fill();
  
-  // Helper: rounded rect
-  function rr(x,y,w,h,r){
+  // ── Helper: rounded rect ──────────────────────────────────────
+  function rr(x,y,w,h,r,fill){
     ctx.beginPath();
     ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
     ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
     ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
     ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
-    ctx.closePath();ctx.fill();
+    ctx.closePath();
+    if(fill)ctx.fillStyle=fill;
+    ctx.fill();
   }
  
-  // Orange gradient
-  const og=ctx.createLinearGradient(0,s*0.25,s,s*0.75);
-  og.addColorStop(0,'#FF4500');og.addColorStop(1,'#CC3000');
+  // ── Main orange gradient ───────────────────────────────────────
+  const og=ctx.createLinearGradient(60,160,s-60,s-160);
+  og.addColorStop(0,'#FF5520');
+  og.addColorStop(1,'#C82000');
   ctx.fillStyle=og;
  
-  // Barbell bar (thin, centered)
-  const barY=s/2-18,barH=36;
-  rr(96,barY,s-192,barH,barH/2);
+  // Dumbbell proportions (centered at y=256)
+  const cy=256;
  
-  // Plates: left outer
-  rr(56,s/2-90,52,180,10);
-  // Plates: left inner
-  rr(114,s/2-68,30,136,7);
-  // Plates: right inner
-  rr(s-144,s/2-68,30,136,7);
-  // Plates: right outer
-  rr(s-108,s/2-90,52,180,10);
+  // Bar (handle)
+  rr(168,cy-17,176,34,17);
  
-  // Collars
-  ctx.fillStyle='rgba(255,120,60,0.55)';
-  rr(150,s/2-38,18,76,4);
-  rr(s-168,s/2-38,18,76,4);
+  // Left collar
+  rr(148,cy-30,22,60,5);
+  // Right collar
+  rr(342,cy-30,22,60,5);
  
-  // LIFT text
-  ctx.fillStyle='#FFFFFF';
-  ctx.font=`bold ${s*0.19}px -apple-system,Helvetica,Arial,sans-serif`;
-  ctx.textAlign='center';
-  ctx.textBaseline='middle';
-  ctx.letterSpacing='8px';
+  // Left outer plate
+  rr(62,cy-88,86,176,14);
+  // Right outer plate
+  rr(364,cy-88,86,176,14);
  
-  // White glow
-  ctx.shadowColor='rgba(255,255,255,0.12)';
-  ctx.shadowBlur=20;
-  ctx.fillText('LIFT',s/2+6,s*0.78);
-  ctx.shadowBlur=0;
+  // ── Highlight (top-left shimmer on plates) ────────────────────
+  ctx.fillStyle='rgba(255,255,255,0.10)';
+  rr(62,cy-88,86,60,14);   // left plate top shine
+  rr(364,cy-88,86,60,14);  // right plate top shine
+ 
+  // ── Inner shadow line on bar ───────────────────────────────────
+  ctx.fillStyle='rgba(0,0,0,0.18)';
+  rr(168,cy-4,176,8,4);
  
   const url=cv.toDataURL('image/png');
   let al=document.getElementById('ati');
@@ -1648,7 +1645,12 @@ window.showOnboarding=function(){
 function buildObExercises(id){
   obExercises={};
   const days=SPLIT_PRESETS[id].days;
-  days.forEach(d=>{obExercises[d.id]=d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));});
+  days.forEach(d=>{
+    const saved=STATE.templates[d.id];
+    obExercises[d.id]=saved&&saved.length
+      ? saved.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}))
+      : d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));
+  });
 }
 function renderObStep1(){
   obStep=1;
@@ -1666,8 +1668,23 @@ function renderObStep1(){
   }).join('');
 }
 function obSelectSplit(id){
-  obSplitId=id;buildObExercises(id);
-  document.querySelectorAll('.ob-split-card').forEach((el,i)=>{el.classList.toggle('selected',Object.keys(SPLIT_PRESETS)[i]===id);});
+  const prev=obSplitId;
+  obSplitId=id;
+  // Only rebuild exercises if switching to a different split
+  // Keep any edits the user made on the current split
+  if(id!==prev){
+    obExercises={};
+    SPLIT_PRESETS[id].days.forEach(d=>{
+      // Prefer existing saved templates, then preset defaults
+      const saved=STATE.templates[d.id];
+      obExercises[d.id]=saved&&saved.length
+        ? saved.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}))
+        : d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));
+    });
+  }
+  document.querySelectorAll('.ob-split-card').forEach((el,i)=>{
+    el.classList.toggle('selected',Object.keys(SPLIT_PRESETS)[i]===id);
+  });
 }
 function renderObStep2(){
   obStep=2;
