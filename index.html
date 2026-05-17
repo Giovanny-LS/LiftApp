@@ -989,6 +989,44 @@ window.renderDash = function renderDash(){
 // ── WORKOUT ───────────────────────────────────────────────────
 let activeWO=null,timerInt=null,restInt=null,pendingSummary=null;
  
+// ── WORKOUT PERSISTENCE ───────────────────────────────────────
+function saveWorkout(){
+  if(!activeWO||!window._currentUID)return;
+  // Store elapsed time so timer resumes correctly after restore
+  activeWO._savedAt=Date.now();
+  localStorage.setItem('lift_wo_'+window._currentUID, JSON.stringify(activeWO));
+}
+function clearWorkout(){
+  if(window._currentUID)localStorage.removeItem('lift_wo_'+window._currentUID);
+}
+function restoreWorkout(){
+  if(!window._currentUID)return;
+  const raw=localStorage.getItem('lift_wo_'+window._currentUID);
+  if(!raw)return;
+  try{
+    const wo=JSON.parse(raw);
+    if(!wo||!wo.dayId)return;
+    // Adjust startTime for time spent in background
+    const bgTime=Date.now()-(wo._savedAt||Date.now());
+    wo.pausedDuration=(wo.pausedDuration||0)+bgTime;
+    delete wo._savedAt;
+    activeWO=wo;
+    const dd=getDayDef(wo.dayId);
+    document.getElementById('wo-badge').textContent=dd.label;
+    const t=document.getElementById('wo-title');t.textContent=dd.name.toUpperCase();t.style.color=dd.color;
+    const ov=document.getElementById('workout-overlay');
+    ov.style.display='flex';requestAnimationFrame(()=>requestAnimationFrame(()=>ov.classList.add('open')));
+    renderWOBody();
+    if(timerInt)clearInterval(timerInt);
+    timerInt=setInterval(()=>{
+      if(!activeWO||activeWO.paused)return;
+      const el=document.getElementById('wo-timer');
+      if(el)el.textContent=fmtDur(Math.floor((Date.now()-activeWO.startTime-(activeWO.pausedDuration||0))/1000));
+    },1000);
+    showToast('Workout hersteld',dd.color);
+  }catch(e){clearWorkout();}
+}
+ 
 function startWorkout(dayId){
   const dd=getDayDef(dayId),tmpl=STATE.templates[dayId]||dd.exercises;
   // Find prev session for comparison
@@ -1057,11 +1095,12 @@ function showWOSheet(){
 function togglePause(){
   if(!activeWO)return;closeActionSheet();
   if(activeWO.paused){activeWO.pausedDuration+=(Date.now()-activeWO.pausedAt);delete activeWO.paused;delete activeWO.pausedAt;document.getElementById('pause-overlay').classList.remove('show');const ic=document.getElementById('pause-icon');if(ic)ic.innerHTML='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';}
-  else{activeWO.paused=true;activeWO.pausedAt=Date.now();document.getElementById('pause-overlay').classList.add('show');const ic=document.getElementById('pause-icon');if(ic)ic.innerHTML='<polygon points="5 3 19 12 5 21 5 3"/>';const el=document.getElementById('pause-elapsed');if(el)el.textContent=fmtDur(Math.floor((Date.now()-activeWO.startTime-(activeWO.pausedDuration||0))/1000));}
+  else{activeWO.paused=true;activeWO.pausedAt=Date.now();saveWorkout();document.getElementById('pause-overlay').classList.add('show');const ic=document.getElementById('pause-icon');if(ic)ic.innerHTML='<polygon points="5 3 19 12 5 21 5 3"/>';const el=document.getElementById('pause-elapsed');if(el)el.textContent=fmtDur(Math.floor((Date.now()-activeWO.startTime-(activeWO.pausedDuration||0))/1000));}
 }
  
 function closeWorkout(){
   closeActionSheet();stopRestTimer();
+  clearWorkout(); // Remove persisted workout
   const ov=document.getElementById('workout-overlay');ov.classList.remove('open');setTimeout(()=>{ov.style.display='none';},350);
   document.getElementById('pause-overlay').classList.remove('show');
   document.getElementById('summary-overlay').classList.remove('show');
@@ -1127,6 +1166,7 @@ function moveEx(ei,dir){
 // WORKOUT BODY
 function renderWOBody(){
   if(!activeWO)return;
+  saveWorkout(); // Persist on every render
   const c=getDayDef(activeWO.dayId).color;
   const prev=activeWO.prevSession;
   const total=activeWO.exercises.length;
@@ -1730,6 +1770,8 @@ window.initApp=function(){
   getEl('dash').className='view visible active';
   document.querySelector('.bnav').style.setProperty('--nav-accent',accentColor());
   renderDash();
+  // Restore active workout if app was killed mid-session
+  restoreWorkout();
 };
 </script>
 </body>
