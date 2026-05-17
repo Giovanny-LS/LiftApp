@@ -496,10 +496,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
       <div class="ob-sub">Pas de standaard oefeningen aan of laat ze staan. Dit zijn je startpunten.</div>
     </div>
     <div id="ob-exercises-list"></div>
-    <div class="ob-footer">
-      <button class="ob-btn" id="ob-next-btn-2" onclick="obNext()">Begin met trainen</button>
-      <button class="ob-btn-sec" id="ob-back-btn-2" onclick="obBack()">Terug</button>
-    </div>
+    <div style="height:160px;flex-shrink:0;"></div>
   </div>
   <div class="ob-footer" id="ob-footer-1" style="position:fixed;bottom:0;left:0;right:0;padding:12px 22px calc(var(--safe-bot)+12px);background:var(--bg);border-top:1px solid var(--border);z-index:950;">
     <button class="ob-btn" id="ob-next-btn" onclick="obNext()">Volgende &rarr;</button>
@@ -1696,7 +1693,9 @@ function renderObStep2(){
   obStep=2;
   document.getElementById('ob-step-1').classList.remove('active');
   document.getElementById('ob-step-2').classList.add('active');
-  document.getElementById('ob-footer-1').style.display='none';
+  document.getElementById('ob-footer-1').style.display='block';
+  document.getElementById('ob-next-btn').textContent='Begin met trainen';
+  document.getElementById('ob-back-btn').style.display='block';
   document.getElementById('ob-next-btn').textContent='Begin met trainen';
   document.getElementById('ob-back-btn').style.display='block';
   const days=SPLIT_PRESETS[obSplitId].days;
