@@ -827,7 +827,13 @@ document.getElementById('auth-pass').addEventListener('keydown',e=>{if(e.key==='
 function dc(o){return JSON.parse(JSON.stringify(o));}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 function getSplit(){return STATE.splitId==='custom'?STATE.customSplit:SPLIT_PRESETS[STATE.splitId];}
-function getRotation(){return getSplit().days.map(d=>d.id);}
+function getRotation(){
+  const days=getSplit().days.map(d=>d.id);
+  if(!STATE.dayOrder||STATE.dayOrder.length!==days.length)return days;
+  // Validate all IDs exist
+  if(STATE.dayOrder.every(id=>days.includes(id)))return STATE.dayOrder;
+  return days;
+}
 function getDayDef(id){return getSplit().days.find(d=>d.id===id)||getSplit().days[0];}
 function getNext(){
   const rot=getRotation();
@@ -997,7 +1003,7 @@ window.renderDash = function renderDash(){
 }
  
 // ── WORKOUT ───────────────────────────────────────────────────
-let activeWO=null,timerInt=null,restInt=null,pendingSummary=null;
+let activeWO=null,timerInt=null,restInt=null,pendingSummary=null,_prShownThisWO=new Set();
  
 // ── WORKOUT PERSISTENCE ───────────────────────────────────────
 function saveWorkout(){
@@ -1038,6 +1044,7 @@ function restoreWorkout(){
 }
  
 function startWorkout(dayId){
+  _prShownThisWO = new Set();
   const dd=getDayDef(dayId),tmpl=STATE.templates[dayId]||dd.exercises;
   // Find prev session for comparison
   const prevSess=[...STATE.sessions].reverse().find(s=>s.type===dayId);
@@ -1226,7 +1233,7 @@ function addSet(ei){const ex=activeWO.exercises[ei];const prev=ex.sets[ex.sets.l
 function delSet(ei,si){activeWO.exercises[ei].sets.splice(si,1);renderWOBody();}
 function updSet(ei,si,f,v){if(activeWO)activeWO.exercises[ei].sets[si][f]=v;}
 var prBannerTimer=null;
-function showPRBanner(name,weight){var b=document.getElementById('pr-banner');var sub=document.getElementById('pr-sub');if(!b)return;if(sub)sub.textContent=name+' — '+weight+' kg';b.classList.add('show');clearTimeout(prBannerTimer);prBannerTimer=setTimeout(function(){b.classList.remove('show');},3000);}
+function showPRBanner(name,weight,reps){var b=document.getElementById('pr-banner');var sub=document.getElementById('pr-sub');if(!b)return;if(sub)sub.textContent=name+' — '+weight+'kg × '+(reps||'?')+' reps';b.classList.add('show');clearTimeout(prBannerTimer);prBannerTimer=setTimeout(function(){b.classList.remove('show');},3000);}
 function toggleSet(ei,si){
   const s=activeWO.exercises[ei].sets[si];
   const row=document.getElementById(`sr-${ei}-${si}`);
@@ -1235,11 +1242,24 @@ function toggleSet(ei,si){
   if(s.done){
     haptic([12]);
     startRestTimer(activeWO.exercises[ei].name);
-    if(s.weight){
-      const w=parseFloat(s.weight);
-      const hist=getExData(activeWO.exercises[ei].name);
-      const prevBest=hist.length?Math.max(...hist.map(d=>d.maxW)):0;
-      if(w>prevBest){showPRBanner(activeWO.exercises[ei].name,w);haptic([20,10,20]);}
+    if(s.weight && s.reps){
+      const exName=activeWO.exercises[ei].name;
+      if(!_prShownThisWO.has(exName)){
+        const w=parseFloat(s.weight), r=parseInt(s.reps);
+        const current1rm=w*(1+r/30);
+        // Get best historical 1RM for this exercise (excluding current workout)
+        const hist=STATE.sessions.flatMap(sess=>
+          (sess.exercises||[]).filter(e=>e.name===exName)
+            .flatMap(e=>e.sets.filter(st=>st.weight&&st.reps)
+              .map(st=>parseFloat(st.weight)*(1+parseInt(st.reps)/30)))
+        );
+        const prevBest1rm=hist.length?Math.max(...hist):0;
+        if(current1rm>prevBest1rm){
+          _prShownThisWO.add(exName);
+          showPRBanner(exName,w,r);
+          haptic([20,10,20]);
+        }
+      }
     }
   }
   renderWOBody();
@@ -1490,12 +1510,14 @@ function renderSett(){
           <div class="sett-row-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
         </div>
         <div style="padding:0 16px 14px;display:flex;flex-direction:column;gap:0">
-          ${getSplit().days.map((d,i)=>`
-          <div style="display:flex;align-items:center;gap:10px;padding:8px 0;${i<getSplit().days.length-1?'border-bottom:1px solid var(--border)':''}">
+          ${(()=>{const rot=getRotation();return rot.map((dayId,i)=>{const d=getDayDef(dayId);return `
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 0;${i<rot.length-1?'border-bottom:1px solid var(--border)':''}">
             <div style="width:9px;height:9px;border-radius:50%;background:${d.color};flex-shrink:0"></div>
             <div style="flex:1;font-weight:600;font-size:13px">${d.name} <span style="color:var(--muted2);font-weight:400">· ${d.label}</span></div>
-            <div style="font-size:11px;color:var(--muted2)">${(STATE.templates[d.id]||d.exercises).length} oef.</div>
-          </div>`).join('')}
+            <div style="font-size:11px;color:var(--muted2);margin-right:4px">${(STATE.templates[d.id]||d.exercises).length} oef.</div>
+            <div onclick="moveDay(${i},-1)" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:${i===0?0.2:0.6};${i===0?'pointer-events:none':''}"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="18 15 12 9 6 15"/></svg></div>
+            <div onclick="moveDay(${i},1)" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:${i===rot.length-1?0.2:0.6};${i===rot.length-1?'pointer-events:none':''}"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--text);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>`;}).join('');})()}
         </div>
       </div>
     </div>
@@ -1753,6 +1775,17 @@ function obDelEx(dayId,ei){
 }
 function obNext(){if(obStep===1)renderObStep2();else obFinish();}
 function obBack(){if(obStep===2)renderObStep1();}
+function moveDay(idx,dir){
+  const rot=[...getRotation()];
+  const to=idx+dir;
+  if(to<0||to>=rot.length)return;
+  const tmp=rot[idx];rot[idx]=rot[to];rot[to]=tmp;
+  STATE.dayOrder=rot;
+  saveState();
+  renderSett();
+  renderDash();
+  showToast(getDayDef(rot[idx]).name+' verplaatst');
+}
 function openSchemaSetup(){
   // Pre-fill with current split and templates
   obSplitId = STATE.splitId==='custom' ? 'ppla' : STATE.splitId;
