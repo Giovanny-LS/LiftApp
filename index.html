@@ -627,6 +627,7 @@ onAuthStateChanged(auth, async (user) => {
         if(!window.STATE.settings) window.STATE.settings = window.defaultSettings();
         if(!window.STATE.bodyWeights) window.STATE.bodyWeights = [];
         if(!window.STATE.skips) window.STATE.skips = [];
+        if(!window.STATE.exNotes) window.STATE.exNotes = {};
       }catch(e){ window.STATE = window.freshState(); }
     } else {
       window.STATE = window.freshState();
@@ -649,6 +650,7 @@ onAuthStateChanged(auth, async (user) => {
         if(!window.STATE.settings) window.STATE.settings = window.defaultSettings();
         if(!window.STATE.bodyWeights) window.STATE.bodyWeights = [];
         if(!window.STATE.skips) window.STATE.skips = [];
+        if(!window.STATE.exNotes) window.STATE.exNotes = {};
       }
       localStorage.setItem('lift_cache_'+user.uid, JSON.stringify(window.STATE));
       window.initApp();
@@ -718,7 +720,7 @@ const CUSTOM_COLORS=['#FF4500','#3B82F6','#8B5CF6','#10B981','#F59E0B','#EC4899'
 
 window.defaultCustomSplit=function(){return{label:'Mijn Split',days:[{id:'custom_0',name:'Dag A',short:'Dag A',label:'Mijn eigen dag A',color:'#FF4500',exercises:[{name:'',targetSets:3,targetReps:'8-12'}]}]};};
 window.defaultSettings=function(){return{restDuration:90,autoRest:true,unit:'kg',lightTheme:false};};
-window.freshState=function(){const t={};SPLIT_PRESETS.ppla.days.forEach(d=>{t[d.id]=d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));});return{sessions:[],skips:[],splitId:'ppla',templates:t,customSplit:window.defaultCustomSplit(),settings:window.defaultSettings(),bodyWeights:[],dayOrder:null,lastBackup:null};};
+window.freshState=function(){const t={};SPLIT_PRESETS.ppla.days.forEach(d=>{t[d.id]=d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));});return{sessions:[],skips:[],splitId:'ppla',templates:t,customSplit:window.defaultCustomSplit(),settings:window.defaultSettings(),bodyWeights:[],dayOrder:null,exNotes:{},lastBackup:null};};
 window.STATE=window.freshState();
 
 let saveTimer=null;
@@ -861,7 +863,34 @@ function fmtDur(s){return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(
 function fmtDate(ts){const d=new Date(ts);return `${['Zo','Ma','Di','Wo','Do','Vr','Za'][d.getDay()]} ${d.getDate()} ${'jan,feb,mrt,apr,mei,jun,jul,aug,sep,okt,nov,dec'.split(',')[d.getMonth()]}`;}
 function fmtDateFull(ts){const d=new Date(ts);return `${['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'][d.getDay()]} ${d.getDate()} ${'januari,februari,maart,april,mei,juni,juli,augustus,september,oktober,november,december'.split(',')[d.getMonth()]} ${d.getFullYear()}`;}
 function fmtMonthLabel(ym){const[y,m]=ym.split('-');return `${'jan,feb,mrt,apr,mei,jun,jul,aug,sep,okt,nov,dec'.split(',')[parseInt(m)-1]} ${y}`;}
-function getStreak(){if(!STATE.sessions.length)return 0;let s=0,p=new Date();p.setHours(0,0,0,0);for(const x of [...STATE.sessions].sort((a,b)=>b.date-a.date)){const dd=new Date(x.date);dd.setHours(0,0,0,0);if((p-dd)/86400000<=1){s++;p=dd;}else break;}return s;}
+function getWeekKey(d){
+  // ISO week: Monday-based
+  const dt=new Date(d);dt.setHours(0,0,0,0);
+  const day=(dt.getDay()+6)%7; // 0=Mon
+  dt.setDate(dt.getDate()-day);
+  return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+}
+function getStreak(){
+  // Weekly streak: consecutive weeks with at least 1 session
+  if(!STATE.sessions.length)return 0;
+  const weeks=new Set(STATE.sessions.map(s=>getWeekKey(s.date)));
+  let streak=0;
+  let cursor=new Date();cursor.setHours(0,0,0,0);
+  // Walk back week by week from current week
+  while(true){
+    const wk=getWeekKey(cursor);
+    if(weeks.has(wk)){streak++;cursor.setDate(cursor.getDate()-7);}
+    else{
+      // Current week may simply not have a session yet — don't break streak on first miss if it's this week
+      if(streak===0){
+        const thisWk=getWeekKey(new Date());
+        if(wk===thisWk){cursor.setDate(cursor.getDate()-7);continue;}
+      }
+      break;
+    }
+  }
+  return streak;
+}
 function getTotalStr(){let t=0;STATE.sessions.forEach(s=>t+=totalVol(s));if(!t)return'0 kg';return t>9999?`${(t/1000).toFixed(1)}t`:`${t.toLocaleString()} kg`;}
 function getMonths(){const set=new Set();STATE.sessions.forEach(s=>{const d=new Date(s.date);set.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);});return[...set].sort().reverse();}
 function sessionsForMonth(ym){if(!ym||ym==='__all__')return STATE.sessions;return STATE.sessions.filter(s=>{const d=new Date(s.date);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`===ym;});}
@@ -995,7 +1024,7 @@ window.renderDash = function renderDash(){
     <div class="stats-row">
       <div class="stat-card"><div class="stat-val bb">${STATE.sessions.length}</div><div class="stat-lbl">Sessies</div></div>
       <div class="stat-card"><div class="stat-val bb" style="font-size:${getTotalStr().length>6?'15px':'24px'};padding-top:${getTotalStr().length>6?'5px':'1px'}">${getTotalStr()}</div><div class="stat-lbl">Volume</div></div>
-      <div class="stat-card"><div class="stat-val bb" style="color:${getStreak()>0?'#FFB800':'var(--muted)'}">${getStreak()}</div><div class="stat-lbl">Streak${getStreak()>0?' 🔥':''}</div></div>
+      <div class="stat-card"><div class="stat-val bb" style="color:${getStreak()>0?'#FFB800':'var(--muted)'}">${getStreak()}</div><div class="stat-lbl">Week streak${getStreak()>0?' 🔥':''}</div></div>
     </div>
     ${buildWeeklyChart()}
     ${showBanner?`<div class="month-banner" onclick="exportPDF('${prevMK}')"><div class="month-banner-text"><div class="month-banner-title">${fmtMonthLabel(prevMK)} rapport klaar</div><div class="month-banner-sub">${sessionsForMonth(prevMK).length} sessies — download PDF</div></div><div class="month-banner-btn">Download</div></div>`:''}
@@ -1076,9 +1105,19 @@ function restoreWorkout(){
 function startWorkout(dayId){
   _prShownThisWO = new Set();
   const dd=getDayDef(dayId),tmpl=STATE.templates[dayId]||dd.exercises;
-  // Find prev session for comparison
+  // Find prev session for comparison + pre-fill
   const prevSess=[...STATE.sessions].reverse().find(s=>s.type===dayId);
-  activeWO={dayId,startTime:Date.now(),pausedDuration:0,exercises:dc(tmpl).map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps,sets:[]})),prevSession:prevSess||null};
+  activeWO={dayId,startTime:Date.now(),pausedDuration:0,exercises:dc(tmpl).map(e=>{
+    // Pre-fill sets from previous session (same exercise name)
+    let sets=[];
+    if(prevSess){
+      const prevEx=(prevSess.exercises||[]).find(p=>p.name===e.name);
+      if(prevEx&&prevEx.sets&&prevEx.sets.length){
+        sets=prevEx.sets.filter(s=>s.weight||s.reps).map(s=>({weight:s.weight||'',reps:s.reps||'',done:false}));
+      }
+    }
+    return {name:e.name,targetSets:e.targetSets,targetReps:e.targetReps,sets};
+  }),prevSession:prevSess||null};
   document.getElementById('wo-badge').textContent=dd.label;
   const t=document.getElementById('wo-title');t.textContent=dd.name.toUpperCase();t.style.color=dd.color;
   const ov=document.getElementById('workout-overlay');
@@ -1088,20 +1127,21 @@ function startWorkout(dayId){
   timerInt=setInterval(()=>{if(!activeWO||activeWO.paused)return;const el=document.getElementById('wo-timer');if(el)el.textContent=fmtDur(Math.floor((Date.now()-activeWO.startTime-(activeWO.pausedDuration||0))/1000));},1000);
 }
 
-// REST TIMER
-let restRemaining=0,restTotal=0,restExName='';
+// REST TIMER (timestamp-based: survives background/lock)
+let restRemaining=0,restTotal=0,restExName='',restEndTime=0;
 function startRestTimer(exName){
   if(!(STATE.settings||{}).autoRest)return;
   stopRestTimer();
   restTotal=(STATE.settings||{}).restDuration||90;
+  restEndTime=Date.now()+restTotal*1000;
   restRemaining=restTotal;
   restExName=exName;
   renderRestPill();
   restInt=setInterval(()=>{
-    restRemaining--;
-    if(restRemaining<=0){stopRestTimer();if(navigator.vibrate)navigator.vibrate([100,50,100]);return;}
+    restRemaining=Math.max(0,Math.ceil((restEndTime-Date.now())/1000));
+    if(restRemaining<=0){stopRestTimer();haptic([100,50,100]);return;}
     updateRestPill();
-  },1000);
+  },500);
 }
 function stopRestTimer(){clearInterval(restInt);restInt=null;const p=document.getElementById('rest-pill-wrap');if(p)p.remove();}
 function renderRestPill(){
@@ -1233,6 +1273,7 @@ function renderWOBody(){
             <input class="ex-meta-inp ex-meta-reps" type="text" placeholder="8-12" value="${esc(ex.targetReps)}" onblur="updEx(${ei},'targetReps',this.value)">
           </div>
           ${prevSetsStr?`<div style="font-size:10px;color:var(--muted);margin-top:2px">Vorige: ${prevSetsStr}</div>`:''}
+          <input type="text" placeholder="Notitie (bankje stand, machine...)" value="${esc((STATE.exNotes||{})[ex.name]||'')}" onblur="updExNote('${esc(ex.name)}',this.value)" style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--muted2);font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;width:100%;padding:3px 0;margin-top:3px;-webkit-appearance:none;outline:none;">
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
           <div class="ex-prog-num" style="color:${done>0&&done>=parseInt(ex.targetSets)?'#CC3800':c}">${done}/${ex.targetSets}</div>
@@ -1255,6 +1296,12 @@ function renderWOBody(){
       <div class="add-set-btn" onclick="addSet(${ei})"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Set toevoegen</div>
     </div>`;
   }).join('')+`<div class="add-ex-btn" onclick="addExercise()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>`;
+}
+function updExNote(exName,note){
+  if(!STATE.exNotes)STATE.exNotes={};
+  if(note.trim())STATE.exNotes[exName]=note.trim();
+  else delete STATE.exNotes[exName];
+  saveState();
 }
 function updEx(ei,f,v){if(!activeWO)return;if(f==='targetSets')v=parseInt(v)||1;activeWO.exercises[ei][f]=v;const ex=activeWO.exercises[ei];const done=ex.sets.filter(s=>s.done).length;const n=document.querySelector(`#ex-${ei} .ex-prog-num`);if(n){n.textContent=`${done}/${ex.targetSets}`;n.style.color=done>0&&done>=parseInt(ex.targetSets)?'#CC3800':getDayDef(activeWO.dayId).color;}}
 function addExercise(){activeWO.exercises.push({name:'',targetSets:3,targetReps:'8-12',sets:[]});renderWOBody();setTimeout(()=>{const cs=document.querySelectorAll('.ex-card');const l=cs[cs.length-1];if(l){l.scrollIntoView({behavior:'smooth',block:'center'});const i=l.querySelector('.ex-name-inp');if(i)setTimeout(()=>i.focus(),300);}},80);}
@@ -1538,6 +1585,22 @@ function renderSett(){
       </div>
     </div>
     <div class="sett-section">
+      <div class="sec-label">Backup</div>
+      <div class="sett-card">
+        <div class="sett-row" onclick="exportBackup()">
+          <div class="sett-row-icon" style="background:#3B82F620"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+          <div class="sett-row-info"><div class="sett-row-title">Backup downloaden</div><div class="sett-row-sub">${STATE.lastBackup?'Laatste: '+fmtDate(STATE.lastBackup):'Alle data als JSON-bestand'}</div></div>
+          <div class="sett-row-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="sett-row" onclick="document.getElementById('backup-file-inp').click()">
+          <div class="sett-row-icon" style="background:#10B98120"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="sett-row-info"><div class="sett-row-title">Backup terugzetten</div><div class="sett-row-sub">Importeer een eerder gedownload bestand</div></div>
+          <div class="sett-row-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+      </div>
+      <input type="file" id="backup-file-inp" accept=".json,application/json" style="display:none" onchange="importBackup(this)">
+    </div>
+    <div class="sett-section">
       <div class="sec-label">Gevarenzone</div>
       <button class="danger-btn" style="background:rgba(255,69,0,0.06);color:#FF4500;margin-bottom:0" onclick="openSchemaSetup()">Schema opnieuw instellen</button>
       <button class="danger-btn" onclick="confirmResetData()">Alle data verwijderen</button>
@@ -1581,6 +1644,52 @@ function setSplit(id){
 
 
 // ── PDF ───────────────────────────────────────────────────────
+function exportBackup(){
+  STATE.lastBackup=Date.now();
+  saveState();
+  const data=JSON.stringify(STATE,null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const d=new Date();
+  a.download='LIFT_backup_'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup gedownload');
+  renderSett();
+}
+function importBackup(inp){
+  const file=inp.files&&inp.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.sessions||!data.templates){showToast('Ongeldig backup-bestand');return;}
+      showActionSheet('Backup terugzetten',[
+        {label:'Ja, vervang alle data',style:'danger',
+         icon:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+         action:'function(){window._doImport();}'}
+      ]);
+      window._pendingImport=data;
+    }catch(err){showToast('Bestand kon niet gelezen worden');}
+  };
+  reader.readAsText(file);
+  inp.value='';
+}
+window._doImport=function(){
+  if(!window._pendingImport)return;
+  window.STATE=window._pendingImport;
+  if(!window.STATE.customSplit)window.STATE.customSplit=window.defaultCustomSplit();
+  if(!window.STATE.settings)window.STATE.settings=window.defaultSettings();
+  if(!window.STATE.bodyWeights)window.STATE.bodyWeights=[];
+  if(!window.STATE.skips)window.STATE.skips=[];
+  if(!window.STATE.exNotes)window.STATE.exNotes={};
+  window._pendingImport=null;
+  saveState();applyTheme();renderSett();nav('dash');renderDash();
+  showToast('Backup teruggezet');
+};
 function exportPDF(monthKey){
   try{
     const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
