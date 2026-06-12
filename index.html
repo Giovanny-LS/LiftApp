@@ -71,7 +71,7 @@ body.light .tmpl-add-ex svg{stroke:#3A3A50 !important;}height:100%;background:va
 .auth-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:700;border-radius:9px;cursor:pointer;color:var(--muted2);transition:all .2s;}
 .auth-tab.active{background:var(--card2);color:var(--text);}
 .auth-form{width:100%;display:flex;flex-direction:column;gap:12px;}
-.auth-inp{background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;padding:14px 16px;width:100%;-webkit-appearance:none;}
+.auth-inp{background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Manrope',sans-serif;font-size:16px;font-weight:600;padding:14px 16px;width:100%;-webkit-appearance:none;}
 .auth-inp:focus{outline:none;border-color:rgba(255,255,255,0.2);}
 .auth-inp::placeholder{color:var(--muted);}
 .auth-btn{width:100%;padding:16px;background:var(--green);color:#fff;font-weight:800;font-size:15px;border:none;border-radius:13px;cursor:pointer;font-family:'Manrope',sans-serif;margin-top:4px;}
@@ -201,10 +201,10 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .rest-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted2);}
 .rest-count{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;color:#FF4500;}
 .rest-ex-name{font-size:11px;color:var(--muted2);font-weight:600;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rest-skip{background:var(--card);border:1px solid var(--border);color:var(--muted2);font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;border-radius:8px;padding:6px 10px;cursor:pointer;flex-shrink:0;}
+.rest-skip{background:var(--card);border:1px solid var(--border);color:var(--muted2);font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;border-radius:9px;padding:9px 14px;cursor:pointer;flex-shrink:0;}
 
 /* SUMMARY OVERLAY */
-#summary-overlay{display:none;position:absolute;inset:0;background:var(--bg);z-index:350;flex-direction:column;overflow-y:auto;}
+#summary-overlay{display:none;position:absolute;inset:0;background:var(--bg);z-index:350;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 #summary-overlay.show{display:flex;}
 #summary-overlay::-webkit-scrollbar{display:none;}
 .sum-hdr{padding:calc(var(--safe-top) + 20px) 18px 20px;border-bottom:1px solid var(--border);}
@@ -239,7 +239,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .ex-card:first-child{margin-top:10px;}
 .ex-hdr{display:flex;align-items:flex-start;gap:9px;padding:11px 13px 9px;}
 .ex-hdr-inputs{flex:1;display:flex;flex-direction:column;gap:5px;}
-.ex-name-inp{background:transparent;border:none;color:var(--text);font-family:'Manrope',sans-serif;font-size:15px;font-weight:800;width:100%;padding:0;}
+.ex-name-inp{background:transparent;border:none;color:var(--text);font-family:'Manrope',sans-serif;font-size:16px;font-weight:800;width:100%;padding:0;}
 .ex-name-inp:focus{outline:none;}
 .ex-name-inp::placeholder{color:var(--muted);}
 .ex-meta-row{display:flex;align-items:center;gap:5px;}
@@ -254,11 +254,11 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .ex-sets{padding:0 13px 7px;}
 .set-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .set-num{font-size:11px;font-weight:700;color:var(--muted);width:15px;flex-shrink:0;text-align:center;}
-.set-inp{background:var(--card2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Manrope',sans-serif;font-weight:600;font-size:14px;text-align:center;padding:10px 2px;flex:1;-webkit-appearance:none;min-width:0;}
+.set-inp{background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Manrope',sans-serif;font-weight:700;font-size:16px;text-align:center;padding:12px 2px;flex:1;-webkit-appearance:none;min-width:0;}
 .set-inp:focus{outline:none;border-color:rgba(255,255,255,0.2);}
 .set-inp::placeholder{color:var(--muted);}
 .set-sep{font-size:11px;color:var(--muted);font-weight:700;flex-shrink:0;}
-.set-done{width:36px;height:36px;border-radius:9px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;}
+.set-done{width:42px;height:42px;border-radius:10px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;}
 .set-done.checked{background:var(--green);border-color:var(--green);}
 .set-done svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
 .set-del{width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;opacity:.4;}
@@ -317,7 +317,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .bw-section{padding:0 18px 16px;}
 .bw-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;}
 .bw-input-row{display:flex;gap:8px;align-items:center;margin-bottom:12px;}
-.bw-inp{background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;text-align:center;padding:10px;flex:1;-webkit-appearance:none;}
+.bw-inp{background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;text-align:center;padding:10px;flex:1;-webkit-appearance:none;}
 .bw-inp:focus{outline:none;border-color:rgba(255,255,255,0.2);}
 .bw-inp::placeholder{color:var(--muted);}
 .bw-log-btn{background:var(--green);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:800;cursor:pointer;flex-shrink:0;}
@@ -447,7 +447,7 @@ body.light .filter-pill.on{border-color:rgba(0,0,0,0.2);background:rgba(0,0,0,0.
 .ob-day-name{font-weight:800;font-size:17px;}
 .ob-day-desc{font-size:12px;color:var(--muted2);margin-top:1px;}
 .ob-ex-row{display:flex;gap:6px;margin-bottom:8px;align-items:center;}
-.ob-ex-inp{background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;padding:10px 12px;flex:1;-webkit-appearance:none;}
+.ob-ex-inp{background:var(--card2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Manrope',sans-serif;font-size:16px;font-weight:600;padding:10px 12px;flex:1;-webkit-appearance:none;}
 .ob-ex-inp:focus{outline:none;border-color:rgba(255,69,0,0.4);}
 .ob-ex-inp::placeholder{color:var(--muted);}
 .ob-ex-sets{width:44px;text-align:center;}
@@ -626,6 +626,7 @@ onAuthStateChanged(auth, async (user) => {
         if(!window.STATE.customSplit) window.STATE.customSplit = window.defaultCustomSplit();
         if(!window.STATE.settings) window.STATE.settings = window.defaultSettings();
         if(!window.STATE.bodyWeights) window.STATE.bodyWeights = [];
+        if(!window.STATE.skips) window.STATE.skips = [];
       }catch(e){ window.STATE = window.freshState(); }
     } else {
       window.STATE = window.freshState();
@@ -647,6 +648,7 @@ onAuthStateChanged(auth, async (user) => {
         if(!window.STATE.customSplit) window.STATE.customSplit = window.defaultCustomSplit();
         if(!window.STATE.settings) window.STATE.settings = window.defaultSettings();
         if(!window.STATE.bodyWeights) window.STATE.bodyWeights = [];
+        if(!window.STATE.skips) window.STATE.skips = [];
       }
       localStorage.setItem('lift_cache_'+user.uid, JSON.stringify(window.STATE));
       window.initApp();
@@ -715,8 +717,8 @@ const SPLIT_PRESETS = {
 const CUSTOM_COLORS=['#FF4500','#3B82F6','#8B5CF6','#10B981','#F59E0B','#EC4899','#06B6D4','#EF4444','#84CC16','#F97316'];
 
 window.defaultCustomSplit=function(){return{label:'Mijn Split',days:[{id:'custom_0',name:'Dag A',short:'Dag A',label:'Mijn eigen dag A',color:'#FF4500',exercises:[{name:'',targetSets:3,targetReps:'8-12'}]}]};};
-window.defaultSettings=function(){return{restDuration:90,autoRest:true};};
-window.freshState=function(){const t={};SPLIT_PRESETS.ppla.days.forEach(d=>{t[d.id]=d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));});return{sessions:[],splitId:'ppla',templates:t,customSplit:window.defaultCustomSplit(),settings:window.defaultSettings(),bodyWeights:[],lastBackup:null};};
+window.defaultSettings=function(){return{restDuration:90,autoRest:true,unit:'kg',lightTheme:false};};
+window.freshState=function(){const t={};SPLIT_PRESETS.ppla.days.forEach(d=>{t[d.id]=d.exercises.map(e=>({name:e.name,targetSets:e.targetSets,targetReps:e.targetReps}));});return{sessions:[],skips:[],splitId:'ppla',templates:t,customSplit:window.defaultCustomSplit(),settings:window.defaultSettings(),bodyWeights:[],dayOrder:null,lastBackup:null};};
 window.STATE=window.freshState();
 
 let saveTimer=null;
@@ -836,7 +838,13 @@ function getRotation(){
   if(STATE.dayOrder.every(id=>days.includes(id)))return STATE.dayOrder;
   return days;
 }
-function getDayDef(id){return getSplit().days.find(d=>d.id===id)||getSplit().days[0];}
+function getDayDef(id){
+  const d=getSplit().days.find(x=>x.id===id);
+  if(d)return d;
+  // Fallback for sessions logged under a different split
+  for(const k in SPLIT_PRESETS){const f=SPLIT_PRESETS[k].days.find(x=>x.id===id);if(f)return f;}
+  return getSplit().days[0];
+}
 function getNext(){
   const rot=getRotation();
   // Combine real sessions and skips, sorted by date
@@ -869,6 +877,7 @@ let currentView='dash',isAnimating=false;
 function getEl(v){return document.getElementById('v-'+v);}
 function nav(v,direction){
   if(v===currentView||isAnimating)return;isAnimating=true;
+  getEl(v).scrollTop=0;
   const from=currentView;currentView=v;
   const fromEl=getEl(from),toEl=getEl(v);
   const goRight=direction==='right'||(!direction&&VIEW_ORDER.indexOf(v)>VIEW_ORDER.indexOf(from));
@@ -980,7 +989,7 @@ window.renderDash = function renderDash(){
   const rot=getRotation();const tmpl=STATE.templates[nt]||dd.exercises;
   document.getElementById('v-dash').innerHTML=`
     <div class="dash-hdr">
-      <div class="greeting">Hey ${window._currentEmail?window._currentEmail.split('@')[0]:''}</div>
+      <div class="greeting">Hey ${window._currentEmail?window._currentEmail.split('@')[0].charAt(0).toUpperCase()+window._currentEmail.split('@')[0].slice(1):''}</div>
       <div class="today-date bb">${dN[now.getDay()]}, ${now.getDate()} ${mN[now.getMonth()]}</div>
     </div>
     <div class="stats-row">
@@ -1328,20 +1337,7 @@ function setupLongPress(el,cb){
   el.addEventListener('touchmove',function(){moved=true;clearTimeout(_lpTimer);},{passive:true});
   el.addEventListener('contextmenu',function(e){e.preventDefault();});
 }
-function attachBWLongPress(){
-  document.querySelectorAll('.bw-entry').forEach(function(el){
-    var bid=parseInt(el.dataset.bid);
-    if(!bid||el.dataset.lpAttached)return;
-    el.dataset.lpAttached='1';
-    setupLongPress(el,function(){
-      showActionSheet('Meting verwijderen',[
-        {label:'Verwijderen',style:'danger',
-         icon:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-         action:'function(){deleteBW('+bid+');}'}
-      ]);
-    });
-  });
-}
+
 function deleteBW(bid){
   STATE.bodyWeights=(STATE.bodyWeights||[]).filter(function(b){return b.id!==bid;});
   saveState();renderProg();showToast('Meting verwijderd');
@@ -1392,15 +1388,14 @@ function renderProg(){
         ${recentBW.length ? '<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">'+recentBW.map(function(b){return '<div class="bw-entry" data-bid="'+b.id+'" style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--card2);border-radius:10px;border:1px solid var(--border)"><div><span style="font-size:14px;font-weight:800">'+dispW(b.weight)+'</span><span style="font-size:11px;color:var(--muted2);margin-left:8px">'+fmtDate(b.date)+'</span></div><div onclick="deleteBW('+b.id+')" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,69,0,0.08);border-radius:8px;border:1px solid rgba(255,69,0,0.2);"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#FF4500;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></div></div>';}).join('')+'</div>' : ''}
       </div>
     </div>
-    ${getSplit().days.map(dd=>{
+    ${(()=>{const ids=[...new Set(STATE.sessions.map(s=>s.type))];const days=ids.map(id=>getDayDef(id)).filter((d,i,arr)=>arr.findIndex(x=>x.id===d.id)===i);return days.map(dd=>{
       const exNames=[...new Set(STATE.sessions.filter(s=>s.type===dd.id).flatMap(s=>s.exercises.map(e=>e.name)).filter(Boolean))];
       if(!exNames.length)return'';
       const cards=exNames.map(n=>buildProgCard(n,dd,filtered)).filter(Boolean).join('');
       if(!cards)return'';
       return `<div class="prog-section-label" style="color:${dd.color}">${dd.name.toUpperCase()} · ${dd.short}</div><div class="prog-grid">${cards}</div>`;
-    }).join('')}
+    }).join('');})()}
     ${allExNames.length===0?'<div class="no-data">Log eerst wat sessies!</div>':''}`;
-  setTimeout(function(){attachBWLongPress();},50);
 }
 
 function logBW(){
@@ -1555,34 +1550,11 @@ function toggleSetting(key){if(!STATE.settings)STATE.settings=window.defaultSett
 function applyTheme(){document.body.classList.toggle('light',!!(STATE.settings||{}).lightTheme);}
 function setRestDur(d){if(!STATE.settings)STATE.settings=window.defaultSettings();STATE.settings.restDuration=d;saveState();renderSett();}
 
-function renderTemplateEditor(){
-  return getSplit().days.map((dd,di)=>{
-    const tmpl=STATE.templates[dd.id]||dd.exercises;
-    return `<div class="tmpl-day" id="td-${di}">
-      <div class="tmpl-day-hdr" onclick="toggleTmplDay(${di})">
-        <div class="tmpl-day-dot" style="background:${dd.color}"></div>
-        <div class="tmpl-day-name">${dd.name}</div>
-        <div class="tmpl-day-count">${tmpl.length} oef.</div>
-        <div class="tmpl-day-chev" id="tc-${di}"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
-      </div>
-      <div class="tmpl-day-body" id="tb-${di}">
-        ${tmpl.map((ex,ei)=>`
-          <div class="tmpl-ex-row">
-            <input class="tmpl-ex-inp" type="text" placeholder="Oefening naam" value="${esc(ex.name)}" onblur="updTmpl('${dd.id}',${ei},'name',this.value)">
-            <input class="tmpl-ex-inp tmpl-ex-small" type="number" inputmode="numeric" placeholder="3" value="${ex.targetSets||''}" onblur="updTmpl('${dd.id}',${ei},'targetSets',this.value)" title="Sets">
-            <input class="tmpl-ex-inp tmpl-ex-small" type="text" placeholder="8-12" value="${esc(ex.targetReps||'')}" onblur="updTmpl('${dd.id}',${ei},'targetReps',this.value)" title="Reps">
-            <input class="tmpl-ex-inp tmpl-ex-small" type="number" inputmode="decimal" placeholder="doel kg" value="${ex.goalWeight||''}" onblur="updTmpl('${dd.id}',${ei},'goalWeight',this.value)" title="Doelgewicht" style="font-size:10px">
-            <div class="tmpl-ex-del" onclick="delTmpl('${dd.id}',${ei})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-          </div>`).join('')}
-        <div class="tmpl-add-ex" onclick="addTmpl('${dd.id}')"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function toggleTmplDay(i){const b=document.getElementById(`tb-${i}`);const c=document.getElementById(`tc-${i}`);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');}
-function updTmpl(dayId,ei,f,v){if(!STATE.templates[dayId])return;if(f==='targetSets')v=parseInt(v)||1;if(f==='goalWeight')v=parseFloat(v)||0;STATE.templates[dayId][ei][f]=v;saveState();}
-function delTmpl(dayId,ei){if(!STATE.templates[dayId])return;if(STATE.templates[dayId].length<=1){showToast('Minimaal 1 oefening');return;}STATE.templates[dayId].splice(ei,1);saveState();renderSett();}
-function addTmpl(dayId){if(!STATE.templates[dayId])STATE.templates[dayId]=[];STATE.templates[dayId].push({name:'',targetSets:3,targetReps:'8-12'});saveState();renderSett();}
+
+
+
+
+
 
 function doLogout(){showActionSheet('Uitloggen',[{label:'Uitloggen',style:'danger',icon:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',action:`function(){window._signOut();}`}]);}
 function confirmResetData(){showActionSheet('Alle data verwijderen',[{label:'Ja, verwijder alles',style:'danger',icon:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',action:`function(){STATE=window.freshState();saveState();closeActionSheet();nav('dash');showToast('Data gewist');}`}]);}
@@ -1596,51 +1568,17 @@ function setSplit(id){
 }
 
 // ── CUSTOM SPLIT EDITOR ───────────────────────────────────────
-function renderCustomSplitEditor(){
-  return `<div class="sett-row" style="flex-direction:column;align-items:flex-start;cursor:default;gap:0;padding-top:4px;padding-bottom:16px">
-    <div class="sett-row-title">Eigen split bouwen</div>
-    <div style="width:100%;margin-top:10px">
-      <div class="cust-field-label">Schema naam</div>
-      <input class="cust-field-inp" type="text" placeholder="Bijv. Mijn PPL" value="${esc(STATE.customSplit.label||'')}" onblur="updCustomLabel(this.value)" style="margin-top:4px;margin-bottom:12px">
-      <div id="cust-days-list">${renderCustomDaysList()}</div>
-      <div class="cust-add-day" onclick="addCustomDay()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Dag toevoegen</div>
-    </div>
-  </div>`;
-}
-function renderCustomDaysList(){return STATE.customSplit.days.map((d,di)=>`
-  <div class="cust-day" id="cday-${di}">
-    <div class="cust-day-hdr" onclick="toggleCustDay(${di})">
-      <div class="cust-day-dot" style="background:${d.color}"></div>
-      <div class="cust-day-name">${esc(d.name)||'Dag '+(di+1)}</div>
-      <div class="cust-day-meta">${d.exercises.length} oef.</div>
-      <div class="cust-day-chevron" id="cchev-${di}"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
-    </div>
-    <div class="cust-day-body" id="cbody-${di}">
-      <div class="cust-field-row"><div class="cust-field-label">Dag naam</div><input class="cust-field-inp" type="text" placeholder="Bijv. Push" value="${esc(d.name)}" onblur="updCustomDay(${di},'name',this.value)"></div>
-      <div class="cust-field-row"><div class="cust-field-label">Omschrijving</div><input class="cust-field-inp" type="text" placeholder="Bijv. Borst · Schouders" value="${esc(d.label)}" onblur="updCustomDay(${di},'label',this.value)"></div>
-      <div class="cust-field-row"><div class="cust-field-label">Kleur</div><div class="color-row">${CUSTOM_COLORS.map(c=>`<div class="color-dot${d.color===c?' sel':''}" style="background:${c}" onclick="updCustomDay(${di},'color','${c}')"></div>`).join('')}</div></div>
-      <div class="cust-field-row"><div class="cust-field-label" style="margin-bottom:6px">Oefeningen</div>
-        <div class="cust-ex-list">${d.exercises.map((ex,ei)=>`
-          <div class="cust-ex-row">
-            <input class="cust-ex-inp" type="text" placeholder="Naam" value="${esc(ex.name)}" onblur="updCustomEx(${di},${ei},'name',this.value)">
-            <input class="cust-ex-inp cust-ex-small" type="number" inputmode="numeric" placeholder="3" value="${ex.targetSets||''}" onblur="updCustomEx(${di},${ei},'targetSets',this.value)">
-            <input class="cust-ex-inp cust-ex-small" type="text" placeholder="8-12" value="${esc(ex.targetReps||'')}" onblur="updCustomEx(${di},${ei},'targetReps',this.value)">
-            <div class="cust-ex-del" onclick="delCustomEx(${di},${ei})"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-          </div>`).join('')}</div>
-        <div class="cust-add-ex" onclick="addCustomEx(${di})"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Oefening toevoegen</div>
-      </div>
-      ${STATE.customSplit.days.length>1?`<div class="cust-del-day" onclick="delCustomDay(${di})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Dag verwijderen</div>`:''}
-    </div>
-  </div>`).join('');}
-function toggleCustDay(di){const b=document.getElementById(`cbody-${di}`);const c=document.getElementById(`cchev-${di}`);if(b)b.classList.toggle('open');if(c)c.classList.toggle('open');}
-function updCustomLabel(v){STATE.customSplit.label=v||'Mijn Split';saveState();}
-function updCustomDay(di,f,v){if(f==='color'){STATE.customSplit.days[di].color=v;saveState();const l=document.getElementById('cust-days-list');if(l){l.innerHTML=renderCustomDaysList();openCustDay(di);}return;}STATE.customSplit.days[di][f]=v;if(f==='name')STATE.customSplit.days[di].short=v;saveState();if(STATE.splitId==='custom')renderDash();}
-function updCustomEx(di,ei,f,v){if(f==='targetSets')v=parseInt(v)||1;STATE.customSplit.days[di].exercises[ei][f]=v;saveState();}
-function addCustomEx(di){STATE.customSplit.days[di].exercises.push({name:'',targetSets:3,targetReps:'8-12'});saveState();const l=document.getElementById('cust-days-list');if(l){l.innerHTML=renderCustomDaysList();openCustDay(di);}setTimeout(()=>{const el=document.querySelector(`#cbody-${di} .cust-ex-list`);if(el){const rows=el.querySelectorAll('.cust-ex-row');const last=rows[rows.length-1];if(last){const inp=last.querySelector('input');if(inp)inp.focus();}}},80);}
-function delCustomEx(di,ei){if(STATE.customSplit.days[di].exercises.length<=1){showToast('Minimaal 1 oefening');return;}STATE.customSplit.days[di].exercises.splice(ei,1);saveState();const l=document.getElementById('cust-days-list');if(l){l.innerHTML=renderCustomDaysList();openCustDay(di);}}
-function addCustomDay(){const idx=STATE.customSplit.days.length;const newId=`custom_${Date.now()}`;STATE.customSplit.days.push({id:newId,name:`Dag ${String.fromCharCode(65+idx%26)}`,short:`Dag ${String.fromCharCode(65+idx%26)}`,label:'Omschrijving',color:CUSTOM_COLORS[idx%CUSTOM_COLORS.length],exercises:[{name:'',targetSets:3,targetReps:'8-12'}]});STATE.templates[newId]=[];saveState();const l=document.getElementById('cust-days-list');if(l){l.innerHTML=renderCustomDaysList();openCustDay(idx);}if(STATE.splitId==='custom')renderDash();}
-function delCustomDay(di){if(STATE.customSplit.days.length<=1){showToast('Minimaal 1 dag nodig');return;}const id=STATE.customSplit.days[di].id;delete STATE.templates[id];STATE.customSplit.days.splice(di,1);saveState();const l=document.getElementById('cust-days-list');if(l)l.innerHTML=renderCustomDaysList();if(STATE.splitId==='custom')renderDash();}
-function openCustDay(di){const b=document.getElementById(`cbody-${di}`);const c=document.getElementById(`cchev-${di}`);if(b)b.classList.add('open');if(c)c.classList.add('open');}
+
+
+
+
+
+
+
+
+
+
+
 
 // ── PDF ───────────────────────────────────────────────────────
 function exportPDF(monthKey){
@@ -1657,7 +1595,9 @@ function exportPDF(monthKey){
     const stats=[{l:'Sessies',v:String(filtered.length)},{l:'Volume',v:`${filtered.reduce((a,s)=>a+totalVol(s),0).toLocaleString()} kg`},{l:'Tijd',v:`${filtered.reduce((a,s)=>a+Math.floor(s.duration/60),0)} min`},{l:'All-time',v:`${STATE.sessions.length} sess.`}];
     const sw=44.5;stats.forEach((st,i)=>{doc.setFillColor(...CARD);doc.roundedRect(10+i*(sw+2),33,sw,16,3,3,'F');doc.setTextColor(...WHITE);doc.setFontSize(12);doc.setFont('helvetica','bold');doc.text(st.v,10+i*(sw+2)+sw/2,42,{align:'center'});doc.setFontSize(6.5);doc.setTextColor(...MUTED);doc.text(st.l,10+i*(sw+2)+sw/2,47,{align:'center'});});
     let y=56;
-    for(const dd of getSplit().days){
+    const allDayIds=[...new Set(STATE.sessions.map(s=>s.type))];
+    const pdfDays=allDayIds.map(id=>getDayDef(id)).filter((d,i,arr)=>arr.findIndex(x=>x.id===d.id)===i);
+    for(const dd of pdfDays){
       const exNames=[...new Set(STATE.sessions.filter(s=>s.type===dd.id).flatMap(s=>s.exercises.map(e=>e.name)).filter(Boolean))];if(!exNames.length)continue;
       const rgb=hexToRgb(dd.color);doc.setFillColor(...rgb);doc.roundedRect(10,y,190,8,2,2,'F');doc.setTextColor(255,255,255);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(`${dd.name.toUpperCase()}  ·  ${dd.short}`,15,y+5.5);y+=11;
       for(const name of exNames){
@@ -1826,6 +1766,8 @@ function openSchemaSetup(){
 }
 
 function obFinish(){
+  // Reset day order when split changes (old order may have invalid day IDs)
+  if(STATE.splitId !== obSplitId) STATE.dayOrder = null;
   STATE.splitId = obSplitId;
   STATE.templates = {};
   SPLIT_PRESETS[obSplitId].days.forEach(d=>{
