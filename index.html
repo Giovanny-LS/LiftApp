@@ -902,6 +902,19 @@ function dispW(w,short){
   if(u==='lbs'){var lbs=Math.round(parseFloat(w)*2.2046*10)/10;return short?lbs+'lbs':lbs+' lbs';}
   return short?w+'kg':w+' kg';
 }
+function swapWithNext(){
+  const rot=[...getRotation()];
+  const cur=getNext();
+  const idx=rot.indexOf(cur);
+  const nextIdx=(idx+1)%rot.length;
+  const tmp=rot[idx];rot[idx]=rot[nextIdx];rot[nextIdx]=tmp;
+  STATE.dayOrder=rot;
+  haptic([10,5,10]);
+  saveState();
+  renderDash();
+  showToast(getDayDef(rot[idx]).name+' ↔ '+getDayDef(rot[nextIdx]).name, getDayDef(rot[idx]).color);
+}
+ 
 function skipDay(){
   if(!STATE.skips)STATE.skips=[];
   const cur=getNext();
@@ -986,9 +999,15 @@ window.renderDash = function renderDash(){
           <div class="nw-btn">Start &rarr;</div>
         </div>
       </div>
-      <div onclick="skipDay()" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;color:var(--muted2);font-size:13px;font-weight:700;">
-        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--muted2);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
-        Dag overslaan
+      <div style="display:flex;gap:9px;margin-top:10px;">
+        <div onclick="swapWithNext()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;color:var(--muted2);font-size:13px;font-weight:700;">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--muted2);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          Swap
+        </div>
+        <div onclick="skipDay()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;background:var(--card);border:1px solid var(--border);border-radius:13px;cursor:pointer;color:var(--muted2);font-size:13px;font-weight:700;">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--muted2);fill:none;stroke-width:2.5;stroke-linecap:round"><polyline points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+          Overslaan
+        </div>
       </div>
     </div>
     <div class="rec-wrap">
